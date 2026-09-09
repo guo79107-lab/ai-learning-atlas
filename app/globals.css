@@ -3380,7 +3380,7 @@ svg {
   overflow-y: auto;
 }
 
-/* System typography with an airy, lock-screen-inspired homepage title. */
+/* System typography with a bold, bright homepage title. */
 .folio-brand {
   font-weight: 500;
   letter-spacing: -0.035em;
@@ -3388,12 +3388,12 @@ svg {
 .folio-copy h1 {
   font-family: var(--font-system);
   font-size: clamp(42px, 4.4vw, 76px);
-  font-weight: 200;
+  font-weight: 700;
   line-height: 1.25;
   letter-spacing: -0.045em;
   max-width: 1200px;
   margin: 0 auto;
-  color: #f5f7f8;
+  color: #ffffff;
   text-wrap: balance;
   -webkit-font-smoothing: antialiased;
 }
@@ -3405,7 +3405,7 @@ svg {
 }
 @supports (-webkit-background-clip: text) {
   .folio-copy h1 {
-    background: linear-gradient(180deg, #fff 12%, #e7edef 62%, #b7c4ca 100%);
+    background: linear-gradient(180deg, #fff 0%, #fff 65%, #e4f0f7 100%);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
