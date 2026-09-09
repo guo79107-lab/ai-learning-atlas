@@ -18,10 +18,12 @@ node scripts/prepare-release.mjs
 
 本机 Vinext beta.5 的静态导出暂不启用 `trailingSlash`，避免预渲染被 308 重定向中断。Nginx 需要将带 `RSC: 1` 的页面请求映射到 `.rsc` 文件，并返回本次构建的 compatibility ID；发布准备脚本根据 `deploy/release.json` 中的发布 ID 自动生成配置，并核对客户端产物。代码升级发布时应更新该 ID，避免旧浏览器混用不兼容的章节数据。
 
+当前部署前缀为 `/ai-learning`。`prebuild` 中的 `scripts/patch-vinext.mjs` 对固定版本 beta.5 的内部预渲染请求补上 `basePath`，只修改已知的一处构建时代码；版本或匹配不符时停止，不改写浏览器产物。`prepare-release.mjs` 同时将前缀目录下的 `_next` 资产复制到静态根目录，供 Nginx 去掉请求前缀后统一读取。
+
 ## 内容与素材来源
 
 - 11 章依据 [Claude Academy AI Fluency](https://academy.claude.com/collections/ai-fluency) 独立中文整理，每章有原始课程链接。通用原则与具体工具的隐私设置、上下文和计费说明明确区分。
-- 视频由用户提供，原始地址及光圈测量过程记录在海报目录中的 `视频光圈节奏.json`。缩放曲线基于 0.25 秒采样的可见青色外圈上缘，不是完整椭圆的物理半径。视频持续放大，没有缩小回程；循环淡出后重置。
+- 视频由用户提供，原始地址及光圈测量过程记录在海报目录中的 `视频光圈节奏.json`。缩放曲线基于 0.25 秒采样的可见青色外圈上缘，不是完整椭圆的物理半径。视频持续放大，没有缩小回程；循环淡出后重置。网页视频保留原始分辨率与时长，采用 H.264 CRF20 与 faststart 优化，从约 19 MB 缩至约 7.4 MB，原始文件保留；逐帧 SSIM 为 0.993。
 - 水星背景仅复制图片到 `public/backgrounds/mercury.webp`。没有修改原星球项目、原部署目录或源文件。
 - 新版 11 张海报位于 `/Users/agnet/AI学习海报-20260909/新版-主题各异/`，提示词与生成记录保存在同目录。网页使用 WebP 副本，原图保留。
 - 知乎创意投稿：https://www.zhihu.com/pin/2080881230841750701
@@ -32,15 +34,19 @@ node scripts/prepare-release.mjs
 
 ## 部署
 
-目标为用户已有服务器上的独立项目目录 `/opt/ai-learning-atlas/`；`releases/` 保留发布包，`current` 只在本项目内切换。上传内容只限 `dist/client/`，不包括服务器中间文件、凭据或本地资料。`deploy/nginx-template.conf` 使用内部验证端口，公开监听或域名在最终发布时指定。
+已上线：[https://47.93.230.221/ai-learning/](https://47.93.230.221/ai-learning/)。当前发布 ID 为 `atlas-20260909-r3`。
 
-原站 `/opt/starwreck/current` 及原 Nginx 站点保持不变。发布前后对原站文件清单和配置做哈希核对。
+使用用户已有服务器上的独立项目目录 `/opt/ai-learning-atlas/`；`releases/` 保留发布包，`current` 只在本项目内切换。网站公开目录只包含 `dist/client/` 静态产物，不包括源码、凭据或本地资料。源码归档单独保存在此项目的 `source/` 目录，不能通过网站访问。
+
+独立 Nginx 站点只监听 `127.0.0.1:18425`。已有 IP HTTPS 站点通过独立的 `/etc/nginx/snippets/ai-learning-atlas.conf` 将 `/ai-learning/` 转发至该端口；配置来源是 `deploy/https-prefix.conf`，修改前的 HTTPS 入口配置保存在服务器项目的 `backups/` 中。没有修改 DNS 或增加公开端口。沿用现有 IP HTTPS 证书，已确认服务器配置有 `certbot-ip-renew.timer` 自动续期任务。
+
+原站 `/opt/starwreck/current` 及原 Nginx 站点保持不变。发布前后已核对原站 203 个文件与 3 份站点配置，哈希完全一致。
 
 ## 验证范围
 
 - 进度合并、重复完成、存储不可用和异常数据的回归测试。
 - 类型检查、lint、所有页面的静态预渲染。
-- 服务器页面/RSC响应、深链接、404、视频Range和静态文件完整性校验。
+- 外网 HTTPS 验证通过：13 个 HTML 页面、13 个 RSC 响应及对应构建 ID、13 个脚本或样式资产、22 个海报文件（11 张各含原尺寸与缩略版）、3 个无效路径的 404、视频 Range 206 响应；服务器静态文件 SHA-256 校验通过。
 - 未执行浏览器视觉或交互自动化测试。
 - WebMCP 提供 `read_learning_progress`、`read_learning_chapter`，功能检测后注册，页面关闭时清理。当前环境没有支持的 WebMCP 验证上下文，未声称已验证运行时注册和调用。
 

@@ -1,11 +1,16 @@
-import sys,json,urllib.request,urllib.error
+import sys,json,urllib.request,urllib.error,urllib.parse
 from html.parser import HTMLParser
 base=sys.argv[1].rstrip('/')
 expected_id=sys.argv[2]
+opener=urllib.request.build_opener(urllib.request.ProxyHandler({}))
+assets=set()
 class Text(HTMLParser):
  def __init__(self):super().__init__();self.parts=[];self.heading=False;self.h1=[]
  def handle_starttag(self,tag,attrs):
   if tag=='h1':self.heading=True
+  data=dict(attrs)
+  resource=data.get('src') if tag=='script' else data.get('href') if tag=='link' and data.get('rel')=='stylesheet' else None
+  if resource and resource.startswith('/'):assets.add(urllib.parse.urljoin(base,resource))
  def handle_endtag(self,tag):
   if tag=='h1':self.heading=False
  def handle_data(self,data):
@@ -14,7 +19,7 @@ class Text(HTMLParser):
 def get(path,headers=None):
  req=urllib.request.Request(base+path,headers=headers or {})
  try:
-  with urllib.request.urlopen(req,timeout=20) as r:return r.status,r.headers,r.read()
+  with opener.open(req,timeout=20) as r:return r.status,r.headers,r.read()
  except urllib.error.HTTPError as e:return e.code,e.headers,e.read()
 results=[];headings=[]
 for route in ['/', '/explore']+[f'/learn/{i}' for i in range(1,12)]:
@@ -36,4 +41,6 @@ for route in ['/learn/0','/learn/12','/not-a-page']:
  assert get(route)[0]==404,(route,'must be 404')
 code,h,b=get('/curiosity.mp4',{'Range':'bytes=0-1023'})
 assert code==206 and len(b)==1024 and h.get('Content-Range','').startswith('bytes 0-1023/'),('video range',code,len(b))
-print(json.dumps({'base':base,'pages':results,'posters':22,'invalidRoutes':3,'videoRange':206,'result':'passed'},ensure_ascii=False,indent=2))
+for url in assets:
+ with opener.open(url,timeout=20) as r:assert r.status==200,(url,r.status)
+print(json.dumps({'assets':len(assets),'base':base,'pages':results,'posters':22,'invalidRoutes':3,'videoRange':206,'result':'passed'},ensure_ascii=False,indent=2))

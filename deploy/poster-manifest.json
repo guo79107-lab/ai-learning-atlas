@@ -1,0 +1,68 @@
+[
+  {
+    "id": 1,
+    "source": "/Users/agnet/AI学习海报-20260909/新版-主题各异/01.png",
+    "sha256": "68851a841bc9b735d4dd0adfc2aac233afbdd544306bb9ca1f283021648e059e",
+    "webImage": "/posters/01.webp"
+  },
+  {
+    "id": 2,
+    "source": "/Users/agnet/AI学习海报-20260909/新版-主题各异/02.png",
+    "sha256": "d29acf7f0f8a97d059a3877f45faf6533ab29e71dee099b166087b30c6809476",
+    "webImage": "/posters/02.webp"
+  },
+  {
+    "id": 3,
+    "source": "/Users/agnet/AI学习海报-20260909/新版-主题各异/03.png",
+    "sha256": "b6e63ba95b3e90f81a3cfb50b10e039d19bbb047b83a39a0141a7657784373cb",
+    "webImage": "/posters/03.webp"
+  },
+  {
+    "id": 4,
+    "source": "/Users/agnet/AI学习海报-20260909/新版-主题各异/04.png",
+    "sha256": "d4bdccf6b0a20dc6e3f9ec966da0029c7d425b6dcc7248d39632a6cd0a212234",
+    "webImage": "/posters/04.webp"
+  },
+  {
+    "id": 5,
+    "source": "/Users/agnet/AI学习海报-20260909/新版-主题各异/05.png",
+    "sha256": "c6df6092b7e1a978c5c7973c6002b3eca364e3a58924cc8165c65d99fcda8473",
+    "webImage": "/posters/05.webp"
+  },
+  {
+    "id": 6,
+    "source": "/Users/agnet/AI学习海报-20260909/新版-主题各异/06.png",
+    "sha256": "4be405d1343809a484192620917f40df7d447c87b15092c26656a506848c83f9",
+    "webImage": "/posters/06.webp"
+  },
+  {
+    "id": 7,
+    "source": "/Users/agnet/AI学习海报-20260909/新版-主题各异/07.png",
+    "sha256": "928b720739b67308890d92d8f8d1a990df30d9d29d3ee8005884598620ac63ae",
+    "webImage": "/posters/07.webp"
+  },
+  {
+    "id": 8,
+    "source": "/Users/agnet/AI学习海报-20260909/新版-主题各异/08.png",
+    "sha256": "1450b083b1e3bbf7bdbf1fda4207899b1bd5601e2339f3c656825b0b349c2395",
+    "webImage": "/posters/08.webp"
+  },
+  {
+    "id": 9,
+    "source": "/Users/agnet/AI学习海报-20260909/新版-主题各异/09.png",
+    "sha256": "ee97a356446878de6847c8cd48af1046dc3cb333ef5f06a1f66e07b8a9ee83a0",
+    "webImage": "/posters/09.webp"
+  },
+  {
+    "id": 10,
+    "source": "/Users/agnet/AI学习海报-20260909/新版-主题各异/10.png",
+    "sha256": "e35b0b70fb22580cb0802a0bece2b3f46530e83f6546aaf891658cf4e124e1ba",
+    "webImage": "/posters/10.webp"
+  },
+  {
+    "id": 11,
+    "source": "/Users/agnet/AI学习海报-20260909/新版-主题各异/11.png",
+    "sha256": "be7add5417b251cc6a60338fa367f0017b4db9198b1e8ec7e9422a86c247d245",
+    "webImage": "/posters/11.webp"
+  }
+]
