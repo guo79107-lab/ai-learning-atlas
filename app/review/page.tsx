@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import {
   ArrowLeft,
   ArrowRight,
-  ArrowUpRight,
   BookOpen,
   Clock3,
   Download,
@@ -46,7 +45,6 @@ import {
   useProgress,
   saveReflection,
   type Reflection,
-  zhihuSourceUrl,
 } from '../atlas-store';
 import lessons from '../lessons.json';
 import cases from '../discussion-cases.json';
@@ -170,7 +168,7 @@ export default function Review() {
     const text = [
       `# ${lesson.title} · 我的学习复盘`,
       '',
-      `课程来源：${lesson.source}`,
+      '课程资料：Claude Academy · 独立中文整理',
       '',
       `活跃学习时长：${duration(timeFor(selected))}`,
       `首次判断：${quiz ? (quiz.first.correct ? '正确' : '待复习') : '未记录'}`,
@@ -194,10 +192,7 @@ export default function Review() {
               : '材料类型：用户添加的知乎摘录（未自动核验）',
             `标题：${discussion.mode === 'sample' ? sample.title : discussion.title}`,
             ...(discussion.mode === 'zhihu'
-              ? [
-                  `原作者：${discussion.author || '未填写'}`,
-                  `原文：${discussion.url}`,
-                ]
+              ? [`原作者：${discussion.author || '未填写'}`]
               : []),
             `摘录：${discussion.mode === 'sample' ? sample.excerpt : discussion.excerpt}`,
             ...argumentFields.flatMap((f) => [
@@ -564,16 +559,6 @@ export default function Review() {
                         : ''}
                       {discussion.completedAt ? '观点卡已保存' : '练习草稿'}
                     </p>
-                    {discussion.mode === 'zhihu' &&
-                      zhihuSourceUrl(discussion.url) && (
-                        <a
-                          href={zhihuSourceUrl(discussion.url)!}
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          回到知乎原文 <ArrowUpRight size={13} />
-                        </a>
-                      )}
                     <details className="review-source-excerpt">
                       <summary>查看讨论摘录</summary>
                       <p>
@@ -714,14 +699,9 @@ export default function Review() {
                 {flipped ? '回到问题' : '翻看知识要点'} <ArrowRight size={15} />
               </span>
             </button>
-            <a
-              className="review-source"
-              href={lesson.source}
-              target="_blank"
-              rel="noreferrer"
-            >
-              查看这一课的原始资料 <ArrowUpRight size={13} />
-            </a>
+            <p className="review-source">
+              课程资料：Claude Academy · 独立中文整理
+            </p>
           </article>
           <article className="review-panel">
             <div className="review-panel-title">

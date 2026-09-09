@@ -1,20 +1,9 @@
 @import 'tailwindcss';
-@font-face {
-  font-family: 'Instrument Serif';
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url('./fonts/InstrumentSerif-Regular.woff2') format('woff2');
-}
-@font-face {
-  font-family: 'Instrument Serif';
-  font-style: italic;
-  font-weight: 400;
-  font-display: swap;
-  src: url('./fonts/InstrumentSerif-Italic.woff2') format('woff2');
-}
 :root {
-  font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  --font-system:
+    -apple-system, BlinkMacSystemFont, 'Helvetica Neue', 'PingFang SC',
+    'Hiragino Sans GB', 'Microsoft YaHei', Arial, sans-serif;
+  font-family: var(--font-system);
   color: #f5f4ef;
   background: #050606;
   font-synthesis: none;
@@ -324,9 +313,7 @@ svg {
   font-size: 11px;
 }
 .halo-card > span b {
-  font:
-    14px 'Instrument Serif',
-    serif;
+  font: 14px var(--font-system);
   color: #fffa;
 }
 .halo-card > span svg {
@@ -470,16 +457,13 @@ svg {
   margin: 0 0 11px;
 }
 .chapter-index > span {
-  font-family: 'Instrument Serif', serif;
+  font-family: var(--font-system);
   font-size: 17px;
   color: #ffffffb0;
   margin-right: 8px;
 }
 .chapter-heading h1 {
-  font:
-    400 clamp(36px, 4vw, 58px)/1.3 'Songti SC',
-    'SimSun',
-    serif;
+  font: 400 clamp(36px, 4vw, 58px)/1.3 var(--font-system);
   letter-spacing: 1px;
   margin: 0 0 16px;
   min-height: 1.3em;
@@ -509,7 +493,7 @@ svg {
   padding: 1px 12px 8px;
 }
 .wheel-label strong {
-  font-family: Georgia, serif;
+  font-family: var(--font-system);
   font-weight: 400;
   letter-spacing: 2px;
 }
@@ -567,9 +551,7 @@ svg {
   text-align: left;
 }
 .wheel-item > span:first-child {
-  font:
-    14px 'Instrument Serif',
-    serif;
+  font: 14px var(--font-system);
   letter-spacing: 1px;
   color: #ffffff78;
 }
@@ -584,9 +566,7 @@ svg {
   font-weight: 500;
 }
 .wheel-item .wheel-code {
-  font:
-    8px Georgia,
-    serif;
+  font: 8px var(--font-system);
   letter-spacing: 1px;
   margin-left: auto;
   color: #ffffff6b;
@@ -779,9 +759,7 @@ svg {
   justify-content: space-between;
   gap: 20px;
   width: 100%;
-  font:
-    10px Georgia,
-    serif;
+  font: 10px var(--font-system);
   letter-spacing: 2px;
   color: #969fa5;
 }
@@ -828,10 +806,7 @@ svg {
   gap: 4px;
 }
 .book-page h1 {
-  font:
-    500 30px/1.4 'Songti SC',
-    'SimSun',
-    serif;
+  font: 500 30px/1.4 var(--font-system);
   margin: 0 0 14px;
   color: #f2f1ed;
 }
@@ -876,10 +851,7 @@ svg {
   border-bottom: 1px solid #ffffff0d;
 }
 .takeaways li > span {
-  font:
-    22px 'Instrument Serif',
-    Georgia,
-    serif;
+  font: 22px var(--font-system);
   color: #8298a7;
   padding-top: 3px;
 }
@@ -1075,9 +1047,7 @@ svg {
   padding: 10px 0;
 }
 .learn-pagination > span:nth-child(2) {
-  font:
-    14px Georgia,
-    serif;
+  font: 14px var(--font-system);
   letter-spacing: 2px;
   color: #98a08e;
 }
@@ -1707,10 +1677,7 @@ svg {
   display: flex;
   align-items: center;
   gap: 12px;
-  font:
-    23px 'Instrument Serif',
-    'Songti SC',
-    serif;
+  font: 23px var(--font-system);
   white-space: nowrap;
 }
 .folio-nav nav {
@@ -1749,11 +1716,7 @@ svg {
   margin: 0 0 17px;
 }
 .folio-copy h1 {
-  font:
-    400 clamp(46px, 4.6vw, 76px)/1.22 'Instrument Serif',
-    'Songti SC',
-    'SimSun',
-    serif;
+  font: 400 clamp(46px, 4.6vw, 76px)/1.22 var(--font-system);
   letter-spacing: -1px;
   margin: 0;
 }
@@ -2077,10 +2040,7 @@ svg {
   margin: 0 0 15px;
 }
 .review-heading h1 {
-  font:
-    400 clamp(30px, 3.2vw, 43px)/1.5 'Songti SC',
-    'SimSun',
-    serif;
+  font: 400 clamp(30px, 3.2vw, 43px)/1.5 var(--font-system);
   letter-spacing: -0.7px;
   margin: 0;
 }
@@ -2140,10 +2100,7 @@ svg {
   padding-right: 25px;
 }
 .review-stats strong {
-  font:
-    400 32px/1.3 'Instrument Serif',
-    'Songti SC',
-    serif;
+  font: 400 32px/1.3 var(--font-system);
   letter-spacing: -0.5px;
   margin: 17px 0 11px;
   white-space: nowrap;
@@ -2176,9 +2133,7 @@ svg {
   gap: 13px;
 }
 .review-panel-title > span {
-  font:
-    24px 'Instrument Serif',
-    serif;
+  font: 24px var(--font-system);
   color: #a0a9af;
   padding-top: 2px;
 }
@@ -2294,10 +2249,7 @@ svg {
   margin-bottom: 26px;
 }
 .review-workspace-heading h2 {
-  font:
-    400 27px/1.5 'Songti SC',
-    'SimSun',
-    serif;
+  font: 400 27px/1.5 var(--font-system);
   margin: 0;
 }
 .review-workspace-heading .review-kicker {
@@ -2358,9 +2310,7 @@ svg {
   margin-bottom: 14px;
 }
 .review-thought > div > span {
-  font:
-    21px 'Instrument Serif',
-    serif;
+  font: 21px var(--font-system);
   color: #a0a9af;
 }
 .review-thought > div > svg {
@@ -2450,9 +2400,7 @@ svg {
   margin-bottom: 22px;
 }
 .review-flashcard h3 {
-  font:
-    400 23px/1.65 'Songti SC',
-    serif;
+  font: 400 23px/1.65 var(--font-system);
   max-width: 450px;
   margin: 13px 0;
 }
@@ -2544,9 +2492,7 @@ svg {
   padding: 15px 0;
 }
 .review-return-list a > span {
-  font:
-    22px 'Instrument Serif',
-    serif;
+  font: 22px var(--font-system);
   color: #a0a9af;
 }
 .review-return-list strong {
@@ -3432,4 +3378,98 @@ svg {
   max-width: 850px;
   max-height: 220px;
   overflow-y: auto;
+}
+
+/* System typography with an airy, lock-screen-inspired homepage title. */
+.folio-brand {
+  font-weight: 500;
+  letter-spacing: -0.035em;
+}
+.folio-copy h1 {
+  font-family: var(--font-system);
+  font-size: clamp(42px, 4.4vw, 76px);
+  font-weight: 200;
+  line-height: 1.25;
+  letter-spacing: -0.045em;
+  max-width: 1200px;
+  margin: 0 auto;
+  color: #f5f7f8;
+  text-wrap: balance;
+  -webkit-font-smoothing: antialiased;
+}
+.folio-copy h1 > span {
+  display: block;
+}
+.folio-question-tail {
+  white-space: nowrap;
+}
+@supports (-webkit-background-clip: text) {
+  .folio-copy h1 {
+    background: linear-gradient(180deg, #fff 12%, #e7edef 62%, #b7c4ca 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+}
+.folio-hook {
+  max-width: 970px;
+  margin: 22px auto 9px;
+  font-weight: 400;
+}
+.chapter-heading h1,
+.review-heading h1 {
+  font-weight: 400;
+  letter-spacing: -0.035em;
+}
+.book-page h1,
+.review-workspace-heading h2,
+.review-flashcard h3 {
+  font-weight: 500;
+  letter-spacing: -0.025em;
+}
+.review-stats strong {
+  font-family: var(--font-system);
+  font-weight: 400;
+  letter-spacing: -0.045em;
+}
+.book-art-meta,
+.lesson-meta,
+.chapter-index {
+  letter-spacing: 0.8px;
+}
+.review-source {
+  color: #9eabb4;
+  line-height: 1.7;
+}
+@media (max-width: 1000px) {
+  .folio-copy h1 {
+    font-size: clamp(36px, 4.5vw, 50px);
+  }
+  .folio-hook {
+    max-width: 720px;
+  }
+}
+@media (max-width: 768px) {
+  .folio-copy h1 {
+    font-size: clamp(30px, 4.9vw, 39px);
+    line-height: 1.3;
+  }
+  .folio-hook {
+    max-width: 560px;
+  }
+}
+@media (max-width: 480px) {
+  .folio-copy h1 {
+    font-size: clamp(27px, 7.7vw, 36px);
+    line-height: 1.3;
+  }
+  .folio-question-tail {
+    display: block;
+  }
+  .folio-hook {
+    max-width: 335px;
+    font-size: 15px;
+    line-height: 1.75;
+    margin-top: 19px;
+  }
 }

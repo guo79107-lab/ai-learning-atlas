@@ -130,11 +130,9 @@ export default function LearningPage({ id }: { id: number }) {
                   ))}
                 </ol>
                 <div className="source-note">
-                  <a href={lesson.source} target="_blank" rel="noreferrer">
-                    阅读原始课程 <ArrowUpRight size={14} />
-                  </a>
                   <p>
-                    独立中文整理。产品设置与计费方式，以所用工具的说明为准。
+                    依据 Claude Academy
+                    课程独立中文整理。产品设置与计费方式，以所用工具的说明为准。
                   </p>
                 </div>
                 <button className="learn-primary" onClick={() => setPage(1)}>

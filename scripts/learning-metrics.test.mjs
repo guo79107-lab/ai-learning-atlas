@@ -11,7 +11,6 @@ const {
   saveDiscussion,
   switchDiscussionMode,
   completeDiscussion,
-  zhihuSourceUrl,
   recordQuiz,
   recordStudyTime,
   saveReflection,
@@ -161,19 +160,8 @@ test('discussion drafts and completion preserve course records and invalidate af
     '新的材料',
   );
 });
-test('Zhihu practice completion requires source and text, untrusted source schemes are rejected', () => {
+test('Zhihu practice requires a title and excerpt but no original URL', () => {
   reset();
-  for (const url of [
-    'javascript:alert(1)',
-    'https://www.zhihu.com.evil.test/a',
-    'https://evil.test',
-    'https://user:pass@www.zhihu.com/a',
-  ])
-    assert.equal(zhihuSourceUrl(url), null);
-  assert.equal(
-    zhihuSourceUrl('https://zhuanlan.zhihu.com/p/123'),
-    'https://zhuanlan.zhihu.com/p/123',
-  );
   saveDiscussion(2, {
     mode: 'zhihu',
     claim: '论断',
@@ -186,10 +174,10 @@ test('Zhihu practice completion requires source and text, untrusted source schem
   saveDiscussion(2, {
     title: '材料标题',
     excerpt: '选取的原文',
-    url: 'https://www.zhihu.com/question/123/answer/456',
   });
   completeDiscussion(2);
   assert.ok(readProgress().metrics.discussions[2].completedAt > 0);
+  assert.equal(readProgress().metrics.discussions[2].url, '');
   assert.deepEqual(readProgress().metrics.quizByDay, {});
   saveDiscussion(2, { excerpt: '' });
   completeDiscussion(2);

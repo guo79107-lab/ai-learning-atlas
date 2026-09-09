@@ -4,7 +4,7 @@ import { sitePath } from './site-config';
 import AtlasTools from './atlas-tools';
 export const metadata: Metadata = {
   icons: { icon: sitePath('/favicon.svg') },
-  title: 'AI 学习图鉴 · 同样用 AI，你的答案值多少钱？',
+  title: 'AI 学习图鉴 · 什么时候相信ai，什么时候不该相信ai你知道吗。',
   description:
     '11 个关卡，练会拆问题、给背景、核验答案。带上一个真实任务，练习把 AI 的回答变成能用的成果。',
 };

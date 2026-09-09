@@ -105,11 +105,15 @@ export default function Home() {
       <section className="folio-copy">
         <p className="folio-eyebrow">AI 学习图鉴 · 从会问，到会用</p>
         <h1>
-          同样用 AI，
-          <br />
-          <em>你的答案，值多少钱？</em>
+          <span>什么时候相信ai，</span>
+          <span>
+            什么时候不该相信ai
+            <span className="folio-question-tail">你知道吗。</span>
+          </span>
         </h1>
-        <p className="folio-hook">10 元的回答，和 1 万元的方案，差在哪里？</p>
+        <p className="folio-hook">
+          有的人用ai只能问出10块钱的答案，而有的人能问出几千甚至几万的答案。
+        </p>
         <p className="folio-tension">
           问题没拆清，答案再漂亮，也可能让你白忙一场。
         </p>

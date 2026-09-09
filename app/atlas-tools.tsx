@@ -51,7 +51,7 @@ export default function AtlasTools() {
         name: 'read_learning_chapter',
         title: '阅读学习章节',
         description:
-          'Read one of the 11 public AI learning chapters and its original course source. Does not mark it complete.',
+          'Read one of the 11 public AI learning chapters. Does not mark it complete.',
         inputSchema: {
           type: 'object',
           properties: { chapter: { type: 'integer', minimum: 1, maximum: 11 } },
@@ -81,7 +81,7 @@ export default function AtlasTools() {
             title: l.title,
             intro: l.intro,
             takeaways: l.takeaways,
-            source: l.source,
+            credit: 'Claude Academy · 独立中文整理',
             url: sitePath(`/learn/${id}`),
           };
         },

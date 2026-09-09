@@ -65,26 +65,10 @@ export const emptyDiscussion = (): Discussion => ({
   choice: null,
   completedAt: null,
 });
-export function zhihuSourceUrl(value: string): string | null {
-  try {
-    const u = new URL(value.trim());
-    if (
-      !['https:', 'http:'].includes(u.protocol) ||
-      u.username ||
-      u.password ||
-      !['www.zhihu.com', 'zhihu.com', 'zhuanlan.zhihu.com'].includes(u.hostname)
-    )
-      return null;
-    return u.href;
-  } catch {
-    return null;
-  }
-}
 export function discussionReady(d: Discussion): boolean {
   return (
     [d.claim, d.evidence, d.counterpoint, d.revision].every((v) => v.trim()) &&
-    (d.mode === 'sample' ||
-      !!(d.title.trim() && d.excerpt.trim() && zhihuSourceUrl(d.url)))
+    (d.mode === 'sample' || !!(d.title.trim() && d.excerpt.trim()))
   );
 }
 function cleanDiscussionDraft(raw: unknown): DiscussionDraft {

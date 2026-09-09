@@ -17,7 +17,6 @@ import {
   switchDiscussionMode,
   completeDiscussion,
   discussionReady,
-  zhihuSourceUrl,
   type Discussion,
 } from './atlas-store';
 
@@ -27,8 +26,7 @@ export default function DiscussionLab({ id }: { id: number }) {
   const sample = cases[id - 1];
   const [step, setStep] = useState(0);
   const custom = d.mode === 'zhihu';
-  const sourceReady =
-    !custom || !!(d.title.trim() && d.excerpt.trim() && zhihuSourceUrl(d.url));
+  const sourceReady = !custom || !!(d.title.trim() && d.excerpt.trim());
   const analysisReady = !!(
     d.claim.trim() &&
     d.evidence.trim() &&
@@ -90,24 +88,7 @@ export default function DiscussionLab({ id }: { id: number }) {
           {custom ? (
             <div className="discussion-import">
               <p className="discussion-help">
-                选一段想弄懂的知乎回答或文章，粘贴相关摘录和原文链接。材料仅保存在本机。
-              </p>
-              <label className="discussion-field">
-                <span>原文链接</span>
-                <input
-                  type="url"
-                  value={d.url}
-                  maxLength={1000}
-                  placeholder="https://www.zhihu.com/question/…/answer/…"
-                  onChange={(e) => change('url', e.target.value)}
-                  aria-invalid={!!d.url && !zhihuSourceUrl(d.url)}
-                  aria-describedby="discussion-url-note"
-                />
-              </label>
-              <p id="discussion-url-note" className="discussion-help">
-                {d.url && !zhihuSourceUrl(d.url)
-                  ? '请填写知乎回答或专栏的 http / https 链接。'
-                  : '这里记录来源，不会自动读取链接内容。'}
+                选一段想弄懂的知乎回答或文章，填上标题并粘贴相关摘录。材料仅保存在本机。
               </p>
               <div className="discussion-source-fields">
                 <label className="discussion-field">
