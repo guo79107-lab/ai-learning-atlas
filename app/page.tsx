@@ -1,6 +1,13 @@
 'use client';
 import { useState, type CSSProperties } from 'react';
-import { ArrowRight, BookOpen, Pause, Play } from 'lucide-react';
+import {
+  ArrowRight,
+  BookOpen,
+  ChevronDown,
+  ChevronUp,
+  Pause,
+  Play,
+} from 'lucide-react';
 import Link from './site-link';
 import { number, stages, useProgress } from './atlas-store';
 import { sitePath } from './site-config';
@@ -83,9 +90,13 @@ function Book({
 }
 export default function Home() {
   const [paused, setPaused] = useState(false);
+  const [booksOpen, setBooksOpen] = useState(false);
   const progress = useProgress();
   return (
-    <main className="folio-home folio-home--breeze">
+    <main
+      className={`folio-home folio-home--background ${booksOpen ? 'has-books' : ''}`}
+    >
+      <BreezeVideo />
       <header className="folio-nav">
         <Link href="/explore" className="folio-brand">
           <BookOpen size={25} />
@@ -103,62 +114,76 @@ export default function Home() {
           <ArrowRight size={15} />
         </Link>
       </header>
-      <div className="folio-hero">
-        <BreezeVideo />
-        <section className="folio-copy">
-          <p className="folio-eyebrow">AI 学习图鉴 · 从会问，到会用</p>
-          <h1>
-            <span>什么时候相信ai，</span>
-            <span>
-              什么时候不该相信ai
-              <span className="folio-question-tail">你知道吗。</span>
-            </span>
-          </h1>
-          <p className="folio-hook">
-            有的人用ai只能问出10块钱的答案，而有的人能问出几千甚至几万的答案。
-          </p>
-          <p className="folio-tension">
-            问题没拆清，答案再漂亮，也可能让你白忙一场。
-          </p>
-          <Link className="folio-entry" href="/explore">
-            开始闯关，把 AI 用出价值{' '}
-            <span>
-              <ArrowRight size={20} />
-            </span>
-          </Link>
-          <p className="folio-description">
-            11 个关卡，练会拆问题、给背景、核验答案。
-            <br />
-            带上一个真实任务，从第一关开始改变。
-          </p>
-        </section>
-      </div>
-      <div
-        className={`folio-marquee ${paused ? 'is-paused' : ''}`}
-        aria-label="11本AI学习图鉴"
-      >
-        <div className="folio-mask">
-          <div className="folio-track">
-            {[0, 1, 2].map((group) => (
-              <div className="folio-group" key={group}>
-                {slots.map((id, slot) => (
-                  <Book key={slot} id={id} slot={slot} group={group} />
+      <section className="folio-copy">
+        <p className="folio-eyebrow">AI 学习图鉴 · 从会问，到会用</p>
+        <h1>
+          <span>什么时候相信ai，</span>
+          <span>
+            什么时候不该相信ai
+            <span className="folio-question-tail">你知道吗。</span>
+          </span>
+        </h1>
+        <p className="folio-hook">
+          有的人用ai只能问出10块钱的答案，而有的人能问出几千甚至几万的答案。
+        </p>
+        <p className="folio-tension">
+          问题没拆清，答案再漂亮，也可能让你白忙一场。
+        </p>
+        <Link className="folio-entry" href="/explore">
+          开始闯关，把 AI 用出价值{' '}
+          <span>
+            <ArrowRight size={20} />
+          </span>
+        </Link>
+        <p className="folio-description">
+          11 个关卡，练会拆问题、给背景、核验答案。
+          <br />
+          带上一个真实任务，从第一关开始改变。
+        </p>
+        <button
+          type="button"
+          className="folio-books-toggle liquid-glass"
+          aria-expanded={booksOpen}
+          aria-controls="homepage-learning-books"
+          onClick={() => setBooksOpen((open) => !open)}
+        >
+          <BookOpen size={16} />
+          <span>{booksOpen ? '收起学习图鉴' : '展开 11 本学习图鉴'}</span>
+          {booksOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+        </button>
+      </section>
+      <div id="homepage-learning-books" hidden={!booksOpen}>
+        {booksOpen && (
+          <div
+            className={`folio-marquee ${paused ? 'is-paused' : ''}`}
+            aria-label="11本AI学习图鉴"
+          >
+            <div className="folio-mask">
+              <div className="folio-track">
+                {[0, 1, 2].map((group) => (
+                  <div className="folio-group" key={group}>
+                    {slots.map((id, slot) => (
+                      <Book key={slot} id={id} slot={slot} group={group} />
+                    ))}
+                  </div>
                 ))}
               </div>
-            ))}
+            </div>
           </div>
-        </div>
+        )}
       </div>
       <footer className="folio-footer">
         <span>11 本图鉴 · 从一个真实问题开始</span>
-        <button
-          className="liquid-glass"
-          onClick={() => setPaused(!paused)}
-          aria-label={paused ? '继续书籍流水线' : '暂停书籍流水线'}
-        >
-          {paused ? <Play size={14} /> : <Pause size={14} />}
-          <span>{paused ? '继续流动' : '停留片刻'}</span>
-        </button>
+        {booksOpen && (
+          <button
+            className="liquid-glass"
+            onClick={() => setPaused(!paused)}
+            aria-label={paused ? '继续书籍流水线' : '暂停书籍流水线'}
+          >
+            {paused ? <Play size={14} /> : <Pause size={14} />}
+            <span>{paused ? '继续流动' : '停留片刻'}</span>
+          </button>
+        )}
       </footer>
     </main>
   );

@@ -44,23 +44,25 @@ export default function BreezeVideo() {
   };
 
   return (
-    <div className="folio-film" style={{ backgroundImage: `url(${poster})` }}>
-      <video
-        ref={video}
-        className="folio-breeze-video"
-        src={sitePath('/media/sunny-reading-1080p.mp4')}
-        poster={poster}
-        muted
-        loop
-        playsInline
-        preload="metadata"
-        aria-hidden="true"
-        tabIndex={-1}
-        onPlay={() => setPlaying(true)}
-        onPause={() => setPlaying(false)}
-        onError={() => setFailed(true)}
-        style={failed ? { visibility: 'hidden' } : undefined}
-      />
+    <>
+      <div className="folio-film" style={{ backgroundImage: `url(${poster})` }}>
+        <video
+          ref={video}
+          className="folio-breeze-video"
+          src={sitePath('/media/sunny-reading-1080p.mp4')}
+          poster={poster}
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          aria-hidden="true"
+          tabIndex={-1}
+          onPlay={() => setPlaying(true)}
+          onPause={() => setPlaying(false)}
+          onError={() => setFailed(true)}
+          style={failed ? { visibility: 'hidden' } : undefined}
+        />
+      </div>
       {!failed && (
         <button
           type="button"
@@ -72,6 +74,6 @@ export default function BreezeVideo() {
           <span>{playing ? '暂停微风' : '播放微风'}</span>
         </button>
       )}
-    </div>
+    </>
   );
 }
