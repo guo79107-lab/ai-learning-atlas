@@ -4,9 +4,9 @@ import { sitePath } from './site-config';
 import AtlasTools from './atlas-tools';
 export const metadata: Metadata = {
   icons: { icon: sitePath('/favicon.svg') },
-  title: 'AI 学习图鉴 · 把好奇心翻成下一页',
+  title: 'AI 学习图鉴 · 同样用 AI，你的答案值多少钱？',
   description:
-    '11 个 AI 问题，11 次小小的进步。翻阅知识海报，做一道练习，建立自己的 AI 判断力。',
+    '11 个关卡，练会拆问题、给背景、核验答案。带上一个真实任务，练习把 AI 的回答变成能用的成果。',
 };
 export default function RootLayout({
   children,

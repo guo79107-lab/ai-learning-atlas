@@ -188,26 +188,24 @@ export default function Home() {
         </Link>
       </header>
       <section className="hero-copy">
-        <p className="overline">THE LEARNING ATLAS</p>
+        <p className="overline">AI 学习图鉴 · 从会问，到会用</p>
         <h1 style={{ fontFamily: "'Instrument Serif', 'Songti SC', serif" }}>
-          让好奇心，<em>带你向前。</em>
+          同样用 AI，<em>你的答案，值多少钱？</em>
         </h1>
-        <p
-          className="hero-english"
-          style={{ fontFamily: "'Instrument Serif', serif" }}
-        >
-          A little curiosity. A new possibility.
+        <p className="hero-hook">10 元的回答，和 1 万元的方案，差在哪里？</p>
+        <p className="hero-tension">
+          问题没拆清，答案再漂亮，也可能让你白忙一场。
         </p>
         <Link className="hero-entry liquid-glass" href="/explore">
-          <span>打开你的 AI 学习图鉴</span>
+          <span>开始闯关，把 AI 用出价值</span>
           <span className="entry-arrow">
             <ArrowRight size={21} />
           </span>
         </Link>
         <p className="hero-subtitle">
-          11 个值得追问的问题，11 次小小的进步。
+          11 个关卡，练会拆问题、给背景、核验答案。
           <br />
-          不必一次学会所有东西，先翻开感兴趣的那一页。
+          带上一个真实任务，从第一关开始改变。
         </p>
       </section>
       <div className="halo-posters" ref={orbitRef} aria-label="学习海报预览">

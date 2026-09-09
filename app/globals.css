@@ -1,5 +1,18 @@
-@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap');
 @import 'tailwindcss';
+@font-face {
+  font-family: 'Instrument Serif';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('./fonts/InstrumentSerif-Regular.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Instrument Serif';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url('./fonts/InstrumentSerif-Italic.woff2') format('woff2');
+}
 :root {
   font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
   color: #f5f4ef;
@@ -189,7 +202,7 @@ svg {
   position: relative;
   align-self: center;
   text-align: center;
-  padding: 52px 24px 0;
+  padding: 36px 24px 0;
   width: 100%;
   pointer-events: none;
 }
@@ -197,14 +210,14 @@ svg {
   pointer-events: auto;
 }
 .overline {
-  font-size: 10px;
-  letter-spacing: 4px;
+  font-size: 12px;
+  letter-spacing: 2px;
   color: #ffffff70;
   margin: 0 0 20px;
 }
 .hero-copy h1 {
   font-weight: 400;
-  font-size: clamp(40px, 4.6vw, 70px);
+  font-size: clamp(34px, 4.3vw, 64px);
   letter-spacing: -1.5px;
   line-height: 1.3;
   margin: 0;
@@ -212,13 +225,21 @@ svg {
 }
 .hero-copy h1 em {
   font-style: normal;
+  display: block;
 }
-.hero-english {
-  font-size: 22px;
-  font-style: italic;
-  font-weight: 400;
-  color: #d8dddc9e;
-  margin: 10px 0 30px;
+.hero-hook {
+  font-size: 18px;
+  line-height: 1.6;
+  color: #e0e8e5;
+  margin: 20px 0 0;
+  text-wrap: balance;
+}
+.hero-tension {
+  font-size: 14px;
+  line-height: 1.8;
+  color: #c0c9c5;
+  margin: 8px 0 24px;
+  text-wrap: balance;
 }
 .hero-entry {
   max-width: 460px;
@@ -248,7 +269,7 @@ svg {
 }
 .hero-subtitle {
   color: #e8efedb0;
-  font-size: 13px;
+  font-size: 14px;
   line-height: 1.9;
   margin: 18px 0 0;
 }
@@ -1071,7 +1092,7 @@ svg {
 }
 @media (min-width: 1500px) {
   .hero-copy {
-    padding-top: 8vh;
+    padding-top: 5vh;
   }
   .halo-card {
     top: 54%;
@@ -1101,7 +1122,7 @@ svg {
     margin-left: auto;
   }
   .hero-copy {
-    padding-top: 62px;
+    padding-top: 42px;
   }
   .halo-card-0 {
     left: 4%;
@@ -1171,15 +1192,15 @@ svg {
     font-size: 11px;
   }
   .hero-copy {
-    padding: 49px 21px 0;
+    padding: 34px 21px 0;
   }
   .overline {
-    font-size: 9px;
-    letter-spacing: 3px;
-    margin-bottom: 22px;
+    font-size: 12px;
+    letter-spacing: 1px;
+    margin-bottom: 18px;
   }
   .hero-copy h1 {
-    font-size: 43px;
+    font-size: clamp(26px, 7.7vw, 39px);
     white-space: normal;
     letter-spacing: 0;
     line-height: 1.45;
@@ -1187,12 +1208,17 @@ svg {
   .hero-copy h1 em {
     display: block;
   }
-  .hero-english {
-    font-size: 19px;
-    margin: 12px 0 26px;
+  .hero-hook {
+    font-size: 15px;
+    margin: 16px 0 0;
+  }
+  .hero-tension {
+    font-size: 14px;
+    margin: 9px auto 20px;
+    max-width: 300px;
   }
   .hero-entry {
-    font-size: 13px;
+    font-size: 14px;
     max-width: 340px;
     padding-left: 22px;
     gap: 10px;
@@ -1202,7 +1228,7 @@ svg {
     height: 41px;
   }
   .hero-subtitle {
-    font-size: 11px;
+    font-size: 14px;
     line-height: 1.9;
     margin-top: 16px;
   }
@@ -1586,9 +1612,6 @@ svg {
   }
   .hero-copy {
     padding-top: 40px;
-  }
-  .hero-english {
-    margin-bottom: 25px;
   }
 }
 @media (max-width: 700px) {

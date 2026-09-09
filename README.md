@@ -34,11 +34,15 @@ node scripts/prepare-release.mjs
 
 ## 部署
 
-已上线：[https://47.93.230.221/ai-learning/](https://47.93.230.221/ai-learning/)。当前发布 ID 为 `atlas-20260909-r3`。
+已上线：[https://47.93.230.221/ai-learning/](https://47.93.230.221/ai-learning/)。当前发布 ID 为 `atlas-20260909-r4`。
+
+首页以“同样用 AI，你的答案，值多少钱？”引出任务价值，金额用作提问，不作为课程收益承诺；随后给出 11 关练习路径。Instrument Serif 正体与斜体随网站加载，移除了可能阻塞首屏的 Google Fonts 外部 CSS 请求。字体来自 Google Fonts 官方文件，使用 SIL OFL 1.1 授权，许可保存在 `public/fonts/OFL.txt`。
 
 使用用户已有服务器上的独立项目目录 `/opt/ai-learning-atlas/`；`releases/` 保留发布包，`current` 只在本项目内切换。网站公开目录只包含 `dist/client/` 静态产物，不包括源码、凭据或本地资料。源码归档单独保存在此项目的 `source/` 目录，不能通过网站访问。
 
 独立 Nginx 站点只监听 `127.0.0.1:18425`。已有 IP HTTPS 站点通过独立的 `/etc/nginx/snippets/ai-learning-atlas.conf` 将 `/ai-learning/` 转发至该端口；配置来源是 `deploy/https-prefix.conf`，修改前的 HTTPS 入口配置保存在服务器项目的 `backups/` 中。没有修改 DNS 或增加公开端口。沿用现有 IP HTTPS 证书，已确认服务器配置有 `certbot-ip-renew.timer` 自动续期任务。
+
+HTTP 入口也通过独立的 `ai-learning-atlas-http.conf` 将本项目路径跳转至 HTTPS，保留章节与查询参数，避免误入商城的兜底页面；来源为 `deploy/http-redirect.conf`。原 HTTP 入口配置备份为服务器 `backups/shop.before-atlas-http.conf`。
 
 原站 `/opt/starwreck/current` 及原 Nginx 站点保持不变。发布前后已核对原站 203 个文件与 3 份站点配置，哈希完全一致。
 
