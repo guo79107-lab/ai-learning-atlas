@@ -5,6 +5,7 @@ import Link from './site-link';
 import { number, stages, useProgress } from './atlas-store';
 import { sitePath } from './site-config';
 import lessons from './lessons.json';
+import BreezeVideo from './breeze-video';
 
 const colors = [
   '#cdc6b4',
@@ -84,7 +85,7 @@ export default function Home() {
   const [paused, setPaused] = useState(false);
   const progress = useProgress();
   return (
-    <main className="folio-home">
+    <main className="folio-home folio-home--breeze">
       <header className="folio-nav">
         <Link href="/explore" className="folio-brand">
           <BookOpen size={25} />
@@ -102,33 +103,36 @@ export default function Home() {
           <ArrowRight size={15} />
         </Link>
       </header>
-      <section className="folio-copy">
-        <p className="folio-eyebrow">AI 学习图鉴 · 从会问，到会用</p>
-        <h1>
-          <span>什么时候相信ai，</span>
-          <span>
-            什么时候不该相信ai
-            <span className="folio-question-tail">你知道吗。</span>
-          </span>
-        </h1>
-        <p className="folio-hook">
-          有的人用ai只能问出10块钱的答案，而有的人能问出几千甚至几万的答案。
-        </p>
-        <p className="folio-tension">
-          问题没拆清，答案再漂亮，也可能让你白忙一场。
-        </p>
-        <Link className="folio-entry" href="/explore">
-          开始闯关，把 AI 用出价值{' '}
-          <span>
-            <ArrowRight size={20} />
-          </span>
-        </Link>
-        <p className="folio-description">
-          11 个关卡，练会拆问题、给背景、核验答案。
-          <br />
-          带上一个真实任务，从第一关开始改变。
-        </p>
-      </section>
+      <div className="folio-hero">
+        <BreezeVideo />
+        <section className="folio-copy">
+          <p className="folio-eyebrow">AI 学习图鉴 · 从会问，到会用</p>
+          <h1>
+            <span>什么时候相信ai，</span>
+            <span>
+              什么时候不该相信ai
+              <span className="folio-question-tail">你知道吗。</span>
+            </span>
+          </h1>
+          <p className="folio-hook">
+            有的人用ai只能问出10块钱的答案，而有的人能问出几千甚至几万的答案。
+          </p>
+          <p className="folio-tension">
+            问题没拆清，答案再漂亮，也可能让你白忙一场。
+          </p>
+          <Link className="folio-entry" href="/explore">
+            开始闯关，把 AI 用出价值{' '}
+            <span>
+              <ArrowRight size={20} />
+            </span>
+          </Link>
+          <p className="folio-description">
+            11 个关卡，练会拆问题、给背景、核验答案。
+            <br />
+            带上一个真实任务，从第一关开始改变。
+          </p>
+        </section>
+      </div>
       <div
         className={`folio-marquee ${paused ? 'is-paused' : ''}`}
         aria-label="11本AI学习图鉴"

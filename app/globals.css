@@ -3473,3 +3473,152 @@ svg {
     margin-top: 19px;
   }
 }
+
+/* Sunny reading film: copy stays clear of the readers; books flow underneath. */
+.folio-home--breeze {
+  height: auto;
+  min-height: 100svh;
+}
+.folio-home--breeze::before {
+  display: none;
+}
+.folio-hero {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  align-items: center;
+  min-height: max(600px, 41vw);
+  max-width: 1920px;
+  margin: auto;
+}
+.folio-film {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 72%;
+  aspect-ratio: 16 / 9;
+  isolation: isolate;
+  background-size: cover;
+  background-position: center;
+  overflow: hidden;
+}
+.folio-breeze-video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+.folio-film::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, #050605 0%, #050605c9 9%, #05060500 31%),
+    linear-gradient(0deg, #050605 0%, #05060500 18%, #05060500 88%, #05060566);
+}
+.folio-home--breeze .folio-copy {
+  padding: 40px 24px 40px 48px;
+  text-align: left;
+}
+.folio-home--breeze .folio-copy h1 {
+  font-size: clamp(36px, 3.5vw, 60px);
+  text-wrap: pretty;
+  filter: drop-shadow(0 2px 14px #0007);
+}
+.folio-home--breeze .folio-hook {
+  margin-left: 0;
+  max-width: 540px;
+  color: #e5e8e3;
+}
+.folio-home--breeze .folio-tension,
+.folio-home--breeze .folio-description {
+  color: #bac3b7;
+}
+.folio-home--breeze .folio-entry {
+  margin-left: 0;
+}
+.folio-film-control {
+  position: absolute;
+  z-index: 2;
+  right: 25px;
+  bottom: 25px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 15px;
+  border-radius: 100px;
+  background: #101910ad;
+  color: #fff;
+  font-size: 12px;
+  cursor: pointer;
+}
+.folio-film-control:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 4px;
+}
+.folio-home--breeze .folio-marquee {
+  position: relative;
+  top: auto;
+  height: calc(var(--folio-height) + 140px);
+  margin-top: -5px;
+  transform: translateX(-50%) rotate(-7deg);
+}
+.folio-home--breeze .folio-footer {
+  position: relative;
+  inset: auto;
+  padding: 0 48px 25px;
+}
+@media (max-width: 1050px) {
+  .folio-hero {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+  .folio-home--breeze .folio-copy {
+    width: 100%;
+    padding: 28px 24px 35px;
+    text-align: center;
+  }
+  .folio-home--breeze .folio-copy h1 {
+    font-size: clamp(32px, 4.5vw, 50px);
+    text-wrap: balance;
+  }
+  .folio-home--breeze .folio-hook,
+  .folio-home--breeze .folio-entry {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .folio-film {
+    position: relative;
+    order: 2;
+    width: 100%;
+    top: auto;
+    transform: none;
+  }
+  .folio-film::after {
+    background: linear-gradient(0deg, #050605, #05060500 13%, #05060500 94%, #05060555);
+  }
+  .folio-home--breeze .folio-footer {
+    padding: 0 24px 25px;
+  }
+}
+@media (max-width: 480px) {
+  .folio-home--breeze .folio-copy {
+    padding: 22px 20px 28px;
+  }
+  .folio-home--breeze .folio-copy h1 {
+    font-size: clamp(27px, 7.7vw, 36px);
+  }
+  .folio-film-control {
+    right: 14px;
+    bottom: 14px;
+    padding: 8px 11px;
+    font-size: 11px;
+  }
+  .folio-home--breeze .folio-footer {
+    padding: 0 18px 20px;
+  }
+}
