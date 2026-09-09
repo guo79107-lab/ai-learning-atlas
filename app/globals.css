@@ -3564,7 +3564,7 @@ svg {
   }
 }
 
-/* Transparent glass: typography is rendered as text, never a baked image. */
+/* Bold white system typography; transparent glass stays on the buttons. */
 .folio-home--background .folio-copy h1.glass-heading {
   font-family: 'SF Pro Rounded', 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', sans-serif;
   font-weight: 800;
@@ -3573,7 +3573,7 @@ svg {
   letter-spacing: -.06em;
   margin-bottom: 28px;
   background: none;
-  -webkit-text-fill-color: unset;
+  -webkit-text-fill-color: currentColor;
   filter: none;
 }
 .glass-heading > span {
@@ -3581,15 +3581,12 @@ svg {
   width: fit-content;
   margin: auto;
   padding: 0 .05em .09em;
-  color: #edf2ee;
-  background: linear-gradient(160deg, #ffffffb8 0%, #ecf1ed57 27%, #e9efe934 53%, #ffffff91 100%);
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  -webkit-text-stroke: .8px #f6fff4ae;
-  paint-order: stroke fill;
-  text-shadow: 0 1px 1px #ffffff24, 0 4px 20px #00000015;
-  filter: drop-shadow(0 1.5px 0 #ffffff40) drop-shadow(0 3px 1px #14201740);
+  color: #fff;
+  background: none;
+  -webkit-text-fill-color: currentColor;
+  -webkit-text-stroke: 0;
+  text-shadow: none;
+  filter: none;
 }
 .folio-home--background .folio-entry,
 .folio-home--background .folio-books-toggle,
@@ -3691,7 +3688,6 @@ svg {
 @media (max-width: 1000px) { .coach-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 700px) {
   .folio-home--background .folio-copy h1.glass-heading { font-size: clamp(52px, 11.5vw, 78px); line-height: 1.12; letter-spacing: -.05em; margin-bottom: 20px; }
-  .glass-heading > span { -webkit-text-stroke: .6px #f6fff4bd; }
   .coach-review-heading, .coach-return-plan { align-items: flex-start; flex-wrap: wrap; }
   .coach-return-plan > div { min-width: 200px; }
   .coach-cards { grid-template-columns: 1fr; }

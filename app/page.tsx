@@ -124,7 +124,7 @@ export default function Home() {
           有的人用ai只能问出10块钱的答案，而有的人能问出几千甚至几万的答案。
         </p>
         <p className="folio-tension">
-          问题没拆清，答案再漂亮，也可能让你白忙一场。
+          来知乎，把好奇变成知识，把知识变成自己的本事。
         </p>
         <Link className="folio-entry liquid-glass" href="/explore">
           开始闯关，把 AI 用出价值{' '}
