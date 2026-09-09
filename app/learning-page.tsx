@@ -3,6 +3,7 @@ import { sitePath } from './site-config';
 import { useEffect, useState } from 'react';
 import Link from './site-link';
 import DiscussionLab from './discussion-lab';
+import AICoach from './ai-coach';
 import { useLearningActivity } from './learning-activity';
 import Image from 'next/image';
 import {
@@ -36,6 +37,7 @@ export default function LearningPage({ id }: { id: number }) {
     // The review desk can return directly to this chapter's discussion exercise.
     if (new URLSearchParams(location.search).get('tab') === 'discussion')
       setPage(2);
+    if (new URLSearchParams(location.search).get('tab') === 'coach') setPage(3);
   }, [id]);
   /* oxlint-enable react/react-compiler */
   const done = progress.completed.includes(id),
@@ -117,6 +119,9 @@ export default function LearningPage({ id }: { id: number }) {
             <button aria-pressed={page === 2} onClick={() => setPage(2)}>
               03 观点练习
             </button>
+            <button aria-pressed={page === 3} onClick={() => setPage(3)}>
+              04 AI 陪练
+            </button>
           </nav>
           <div className="turning-page" key={page}>
             {page === 0 ? (
@@ -139,6 +144,8 @@ export default function LearningPage({ id }: { id: number }) {
                   翻到练习页 <ArrowRight size={18} />
                 </button>
               </>
+            ) : page === 3 ? (
+              <AICoach id={id} />
             ) : page === 2 ? (
               <DiscussionLab id={id} />
             ) : (
@@ -239,7 +246,7 @@ export default function LearningPage({ id }: { id: number }) {
             <Link href={`/review?chapter=${id}`}>
               拆解思路，做一次复盘 <ArrowUpRight size={13} />
             </Link>
-            <span>0{page + 1} / 03</span>
+            <span>0{page + 1} / 04</span>
           </footer>
         </section>
       </article>

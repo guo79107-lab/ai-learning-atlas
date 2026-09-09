@@ -3563,3 +3563,151 @@ svg {
     display: inline-flex;
   }
 }
+
+/* Transparent glass: typography is rendered as text, never a baked image. */
+.folio-home--background .folio-copy h1.glass-heading {
+  font-family: 'SF Pro Rounded', 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', sans-serif;
+  font-weight: 800;
+  font-size: clamp(64px, 6.5vw, 108px);
+  line-height: 1.1;
+  letter-spacing: -.06em;
+  margin-bottom: 28px;
+  background: none;
+  -webkit-text-fill-color: unset;
+  filter: none;
+}
+.glass-heading > span {
+  display: block;
+  width: fit-content;
+  margin: auto;
+  padding: 0 .05em .09em;
+  color: #edf2ee;
+  background: linear-gradient(160deg, #ffffffb8 0%, #ecf1ed57 27%, #e9efe934 53%, #ffffff91 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -webkit-text-stroke: .8px #f6fff4ae;
+  paint-order: stroke fill;
+  text-shadow: 0 1px 1px #ffffff24, 0 4px 20px #00000015;
+  filter: drop-shadow(0 1.5px 0 #ffffff40) drop-shadow(0 3px 1px #14201740);
+}
+.folio-home--background .folio-entry,
+.folio-home--background .folio-books-toggle,
+.folio-home--background .folio-entry:hover,
+.folio-home--background .folio-books-toggle:hover {
+  background: transparent;
+  border: 0;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  box-shadow: inset 0 1px 1px #ffffff24, inset 0 -1px 1px #ffffff12;
+  color: #f6f7f3;
+}
+.folio-home--background .folio-entry > span {
+  background: transparent;
+  color: #f6f7f3;
+  border: 1px solid #ffffff32;
+}
+.folio-entry:focus-visible { outline: 2px solid white; outline-offset: 4px; }
+.folio-entry:hover::before, .folio-books-toggle:hover::before { opacity: .8; }
+
+/* A small, legible coaching desk in the existing dark learning room. */
+.ai-coach { color: #dbe0e6; }
+.coach-intro h2 { font-size: 25px; line-height: 1.5; font-weight: 600; margin: 12px 0 8px; letter-spacing: -.03em; }
+.coach-intro p, .coach-review-heading p { color: #a5afbb; line-height: 1.85; font-size: 14px; }
+.coach-eyebrow { display: inline-flex; align-items: center; gap: 8px; font-size: 12px; color: #aec6d8; }
+.coach-form { border: 0; margin: 26px 0 0; padding: 0; min-width: 0; }
+.coach-field { display: grid; gap: 10px; margin: 18px 0; }
+.coach-field > span { color: #d3dbe3; font-size: 13px; font-weight: 500; }
+.coach-field small, .coach-fine { font-size: 12px; color: #98a4b1; line-height: 1.85; }
+.coach-field > span small { margin-left: 8px; font-weight: 400; }
+.coach-field input, .coach-field textarea { width: 100%; min-width: 0; color: #edf0f4; background: #ffffff04; border: 1px solid #ffffff25; border-radius: 12px; padding: 13px 15px; font: inherit; font-size: 14px; line-height: 1.8; outline: none; }
+.coach-field textarea { min-height: 130px; resize: vertical; }
+.coach-answer textarea { min-height: 170px; }
+.coach-field input:focus, .coach-field textarea:focus { border-color: #acbdcea1; box-shadow: 0 0 0 3px #bccde510; }
+.coach-field p { font-size: 14px; line-height: 1.8; color: #bec8d2; margin: 0; }
+.coach-material-tabs { display: flex; gap: 8px; margin: 22px 0 14px; }
+.coach-material-tabs button { background: transparent; border: 1px solid #ffffff1e; border-radius: 100px; color: #aab7c5; padding: 8px 15px; font-size: 12px; cursor: pointer; }
+.coach-material-tabs button[aria-pressed='true'] { color: #eef4fa; border-color: #a8c2db77; background: #9db9d20d; }
+.coach-material { border-left: 2px solid #91a7b94d; padding: 2px 0 2px 18px; margin: 20px 0 24px; }
+.coach-material small { color: #8d9aa7; font-size: 11px; }
+.coach-material h3 { font-size: 16px; font-weight: 500; margin: 10px 0; line-height: 1.7; }
+.coach-material p { color: #aebac6; font-size: 14px; line-height: 1.9; }
+.coach-submit-row, .coach-actions { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+.coach-submit-row .learn-primary { margin: 8px 0; }
+.coach-text-button { color: #becedf; font-size: 12px; background: transparent; border: 0; padding: 8px 0; cursor: pointer; text-decoration: underline; text-underline-offset: 4px; }
+.coach-error { border: 1px solid #b29c774d; color: #e8cda9; padding: 12px 15px; border-radius: 10px; font-size: 13px; line-height: 1.8; }
+.coach-result { margin-top: 30px; padding-top: 22px; border-top: 1px solid #ffffff20; }
+.coach-saved { display: flex; align-items: center; gap: 7px; font-size: 12px; color: #aabecb; margin-bottom: 20px; }
+.coach-saved > span { margin-left: auto; color: #8291a1; }
+.coach-feedback { border: 1px solid #ffffff1f; background: linear-gradient(140deg, #bdcce10b, #ffffff02); border-radius: 16px; padding: 22px; }
+.coach-feedback-heading { display: flex; align-items: center; gap: 8px; color: #dce7ef; font-size: 13px; }
+.coach-feedback-heading > span { font-size: 10px; margin-left: auto; letter-spacing: 1px; color: #a5b1bd; }
+.coach-feedback blockquote { border-left: 2px solid #a8c1d45c; padding-left: 14px; margin: 22px 0 16px; color: #d8e1e9; font-size: 16px; line-height: 1.8; overflow-wrap: anywhere; }
+.coach-feedback p { font-size: 14px; color: #b7c4d0; line-height: 1.9; }
+.coach-gap { padding: 18px 0 7px; }
+.coach-gap > span, .coach-next-question > span { color: #decdad; font-size: 12px; }
+.coach-gap p { margin-top: 8px; }
+.coach-checks { margin: 10px 0 18px; border-top: 1px solid #ffffff15; }
+.coach-checks details { border-bottom: 1px solid #ffffff15; padding: 12px 0; }
+.coach-checks summary { display: flex; align-items: center; justify-content: space-between; gap: 12px; cursor: pointer; font-size: 12px; list-style: none; }
+.coach-status { font-size: 11px; color: #b5c0cd; }
+.coach-status.shown { color: #a9c8d8; }
+.coach-status.missing { color: #cdbc9c; }
+.coach-checks p { margin-bottom: 0; font-size: 13px; }
+.coach-next-question { padding: 24px 2px 10px; }
+.coach-next-question p { color: #c3cdd7; font-size: 14px; line-height: 1.85; }
+.coach-actions .learn-secondary { margin: 4px 0; }
+.coach-recommendation { display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 18px; margin-top: 22px; border: 1px solid #ffffff20; border-radius: 12px; }
+.coach-recommendation small { display: block; color: #96a9b9; font-size: 11px; margin-bottom: 9px; }
+.coach-recommendation strong { font-size: 14px; font-weight: 500; color: #e4eaf0; }
+.coach-recommendation p { color: #a2b0be; font-size: 12px; line-height: 1.8; margin-bottom: 0; }
+.coach-review-link { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 22px; font-size: 13px; color: #baccd9; }
+.coach-review { margin-bottom: 24px; }
+.coach-review-heading { display: flex; gap: 20px; align-items: center; justify-content: space-between; }
+.coach-review-heading h2 { color: #e6edf3; font-size: 25px; font-weight: 500; letter-spacing: -.03em; margin: 10px 0; }
+.coach-review-heading .learn-secondary { white-space: nowrap; }
+.coach-return-plan { display: flex; align-items: center; gap: 20px; padding: 22px 0; margin: 16px 0 0; border-top: 1px solid #ffffff1b; }
+.coach-return-plan > svg { color: #b0c8d8; flex-shrink: 0; align-self: flex-start; margin-top: 3px; }
+.coach-return-plan > div { flex: 1; }
+.coach-return-plan span { font-size: 12px; color: #96aabb; }
+.coach-return-plan h3 { font-size: 16px; color: #d4dfe8; line-height: 1.8; font-weight: 500; margin: 7px 0; }
+.coach-return-plan p { color: #9dacba; font-size: 13px; line-height: 1.8; margin-bottom: 0; }
+.coach-return-plan > a { flex-shrink: 0; }
+.coach-cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin: 24px 0 8px; align-items: start; }
+.coach-recall-card { border: 1px solid #ffffff24; border-radius: 14px; padding: 20px; background: #d0ddea04; }
+.coach-recall-meta { display: grid; gap: 7px; font-size: 11px; color: #9badbe; }
+.coach-recall-card h3 { font-weight: 500; color: #dfe8f1; font-size: 17px; line-height: 1.8; margin: 19px 0; }
+.coach-card-back { color: #becbd6; font-size: 14px; line-height: 1.9; border-top: 1px solid #ffffff1e; margin: 15px 0; }
+.coach-card-back small { font-size: 10px; color: #9fabb7; }
+.coach-recall-card > .coach-fine { display: block; margin-top: 16px; font-size: 11px; }
+.coach-history, .coach-more { margin-top: 24px; padding-top: 18px; border-top: 1px solid #ffffff1b; }
+.coach-history summary, .coach-more summary { cursor: pointer; font-size: 13px; color: #b5c5d3; }
+.coach-history article { max-width: 800px; margin: 24px auto; }
+.coach-history article > small { color: #93a1b0; }
+.coach-history h3 { font-weight: 500; font-size: 15px; color: #d0dce6; margin: 15px 0; }
+.coach-own-answer { color: #a8b7c4; line-height: 1.9; font-size: 14px; white-space: pre-wrap; overflow-wrap: anywhere; }
+.coach-spinner { animation: coach-spin 1.5s linear infinite; }
+@keyframes coach-spin { to { transform: rotate(360deg); } }
+@media (max-width: 1000px) { .coach-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 700px) {
+  .folio-home--background .folio-copy h1.glass-heading { font-size: clamp(52px, 11.5vw, 78px); line-height: 1.12; letter-spacing: -.05em; margin-bottom: 20px; }
+  .glass-heading > span { -webkit-text-stroke: .6px #f6fff4bd; }
+  .coach-review-heading, .coach-return-plan { align-items: flex-start; flex-wrap: wrap; }
+  .coach-return-plan > div { min-width: 200px; }
+  .coach-cards { grid-template-columns: 1fr; }
+  .coach-feedback { padding: 18px; }
+  .coach-intro h2, .coach-review-heading h2 { font-size: 22px; }
+  .page-tabs { flex-wrap: wrap; }
+  .page-tabs button { flex: 1; min-width: 100px; }
+}
+@media (prefers-reduced-motion: reduce) { .coach-spinner { animation: none; } }
+@media (forced-colors: active) { .glass-heading > span { -webkit-text-fill-color: CanvasText; -webkit-text-stroke: 0; text-shadow: none; filter: none; } }
+.coach-review-heading > div { flex: 1; min-width: 0; }
+.coach-review-heading > .learn-secondary,
+.coach-return-plan > .learn-secondary,
+.coach-actions > .learn-secondary { width: auto; flex-shrink: 0; }
+.coach-return-plan > div { min-width: 0; }
+@media (max-width: 700px) {
+  .coach-review-heading > div { flex-basis: 100%; }
+  .coach-return-plan > div { min-width: 220px; }
+}

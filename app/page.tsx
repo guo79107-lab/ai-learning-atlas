@@ -116,12 +116,9 @@ export default function Home() {
       </header>
       <section className="folio-copy">
         <p className="folio-eyebrow">AI 学习图鉴 · 从会问，到会用</p>
-        <h1>
-          <span>什么时候相信ai，</span>
-          <span>
-            什么时候不该相信ai
-            <span className="folio-question-tail">你知道吗。</span>
-          </span>
+        <h1 className="glass-heading">
+          <span>会用 AI，</span>
+          <span>更会判断。</span>
         </h1>
         <p className="folio-hook">
           有的人用ai只能问出10块钱的答案，而有的人能问出几千甚至几万的答案。
@@ -129,7 +126,7 @@ export default function Home() {
         <p className="folio-tension">
           问题没拆清，答案再漂亮，也可能让你白忙一场。
         </p>
-        <Link className="folio-entry" href="/explore">
+        <Link className="folio-entry liquid-glass" href="/explore">
           开始闯关，把 AI 用出价值{' '}
           <span>
             <ArrowRight size={20} />

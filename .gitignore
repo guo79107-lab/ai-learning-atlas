@@ -45,3 +45,8 @@ next-env.d.ts
 /deploy/SHA256SUMS
 /deploy/nginx-stage.conf
 /deploy/nginx-live.conf
+
+# Python runtime and private API state
+__pycache__/
+*.pyc
+*.sqlite

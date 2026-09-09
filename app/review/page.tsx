@@ -48,6 +48,7 @@ import {
 } from '../atlas-store';
 import lessons from '../lessons.json';
 import cases from '../discussion-cases.json';
+import CoachReview from '../coach-review';
 
 const palette = ['#9bb9ce', '#c5a383', '#818b96'];
 const argumentFields = [
@@ -285,6 +286,7 @@ export default function Review() {
             <small>把阅读变成一次有依据的判断</small>
           </article>
         </section>
+        <CoachReview now={today} selected={selected} />
         <section className="review-chart-grid">
           <article className="review-panel">
             <div className="review-panel-title">

@@ -46,9 +46,17 @@ export default defineConfig(async () => {
 
   return {
     css: { postcss: { plugins: [tailwindcss()] } },
-    server: isCodexSeatbeltSandbox
-      ? { watch: { useFsEvents: false, usePolling: true } }
-      : undefined,
+    server: {
+      ...(isCodexSeatbeltSandbox
+        ? { watch: { useFsEvents: false, usePolling: true } }
+        : {}),
+      proxy: {
+        '/ai-learning/api': {
+          target: 'http://127.0.0.1:18426',
+          rewrite: (path: string) => path.replace(/^\/ai-learning/, ''),
+        },
+      },
+    },
     plugins: [
       vinext(),
       sites(),

@@ -1,0 +1,25 @@
+[Unit]
+Description=AI Learning Atlas - private DeepSeek coaching API
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+DynamicUser=yes
+WorkingDirectory=/opt/ai-learning-atlas/backend-current
+ExecStart=/usr/bin/python3 server/coach.py
+EnvironmentFile=/etc/ai-learning-atlas.env
+Environment=PYTHONDONTWRITEBYTECODE=1
+StateDirectory=ai-learning-atlas
+UMask=0077
+Restart=on-failure
+RestartSec=5
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=strict
+ProtectHome=yes
+MemoryMax=256M
+TasksMax=32
+
+[Install]
+WantedBy=multi-user.target
