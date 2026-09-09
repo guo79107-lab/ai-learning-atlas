@@ -14,6 +14,7 @@ if (failures.length)
 for (const page of [
   'index',
   'explore',
+  'review',
   ...Array.from({ length: 11 }, (_, i) => `learn/${i + 1}`),
 ])
   for (const ext of ['html', 'rsc']) await stat(`${root}/${page}.${ext}`);

@@ -5,10 +5,11 @@ expected_id=sys.argv[2]
 opener=urllib.request.build_opener(urllib.request.ProxyHandler({}))
 assets=set()
 class Text(HTMLParser):
- def __init__(self):super().__init__();self.parts=[];self.heading=False;self.h1=[]
+ def __init__(self):super().__init__();self.parts=[];self.heading=False;self.h1=[];self.links=[]
  def handle_starttag(self,tag,attrs):
   if tag=='h1':self.heading=True
   data=dict(attrs)
+  if tag=='a':self.links.append(data.get('href',''))
   resource=data.get('src') if tag=='script' else data.get('href') if tag=='link' and data.get('rel')=='stylesheet' else None
   if resource and resource.startswith('/'):assets.add(urllib.parse.urljoin(base,resource))
  def handle_endtag(self,tag):
@@ -22,10 +23,13 @@ def get(path,headers=None):
   with opener.open(req,timeout=20) as r:return r.status,r.headers,r.read()
  except urllib.error.HTTPError as e:return e.code,e.headers,e.read()
 results=[];headings=[]
-for route in ['/', '/explore']+[f'/learn/{i}' for i in range(1,12)]:
+for route in ['/', '/explore', '/review']+[f'/learn/{i}' for i in range(1,12)]:
  code,h,b=get(route);assert code==200,(route,code)
  assert h.get_content_type()=='text/html',(route,h.get_content_type())
  p=Text();p.feed(b.decode('utf8'));assert p.h1,(route,'missing h1')
+ prefix=urllib.parse.urlsplit(base).path
+ if route=='/':assert p.links and all(link==prefix+'/explore' for link in p.links),('homepage may only lead to explore',p.links)
+ if route=='/explore':assert len([link for link in p.links if link.startswith(prefix+'/learn/')])==1,'Only enter-learning may lead to a course'
  headings.append(''.join(p.h1))
  rc,rh,rb=get(route+'?_rsc=verify',{'RSC':'1','Accept':'text/x-component'})
  assert rc==200,(route,'RSC',rc)
@@ -33,7 +37,7 @@ for route in ['/', '/explore']+[f'/learn/{i}' for i in range(1,12)]:
  assert rh.get('X-Vinext-RSC-Compatibility-Id')==expected_id,(route,'ID mismatch')
  assert rb and not rb.lstrip().startswith(b'<!DOCTYPE'),(route,'RSC body is HTML')
  results.append({'route':route,'html':code,'rsc':rc,'heading':headings[-1]})
-assert len(set(headings[2:]))==11,'Duplicate learning page heading'
+assert len(set(headings[3:]))==11,'Duplicate learning page heading'
 for i in range(1,12):
  for suffix in ['.webp','-card.webp']:
   code,h,b=get(f'/posters/{i:02}{suffix}');assert code==200 and b[:4]==b'RIFF',(i,suffix,code)

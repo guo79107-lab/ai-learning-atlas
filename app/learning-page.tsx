@@ -2,6 +2,7 @@
 import { sitePath } from './site-config';
 import { useEffect, useState } from 'react';
 import Link from './site-link';
+import { useLearningActivity } from './learning-activity';
 import Image from 'next/image';
 import {
   ArrowLeft,
@@ -17,10 +18,12 @@ import {
   number,
   rememberChapter,
   saveNote,
+  recordQuiz,
   stageFor,
   useProgress,
 } from './atlas-store';
 export default function LearningPage({ id }: { id: number }) {
+  const tracking = useLearningActivity(id);
   const lesson = lessons[id - 1],
     progress = useProgress();
   const [page, setPage] = useState(0),
@@ -40,7 +43,9 @@ export default function LearningPage({ id }: { id: number }) {
         <Link className="back-link" href={`/explore?chapter=${id}`}>
           <ArrowLeft size={15} /> 返回学习地图
         </Link>
-        <span>{progress.completed.length} / 11 已探索</span>
+        <Link href={`/review?chapter=${id}`} className="review-entry">
+          学习复盘 <ArrowUpRight size={14} />
+        </Link>
       </header>
       <nav className="lesson-breadcrumb" aria-label="当前位置">
         <Link href="/">首页</Link>
@@ -84,6 +89,9 @@ export default function LearningPage({ id }: { id: number }) {
           <div className="lesson-meta">
             <span>
               第 {number(id)} 关 · {stageFor(id).name}
+            </span>
+            <span className="study-clock-status">
+              {tracking ? '正在记录活跃时长' : '活跃计时已暂停'}
             </span>
             {done && (
               <span>
@@ -149,6 +157,7 @@ export default function LearningPage({ id }: { id: number }) {
                     disabled={choice === null}
                     onClick={() => {
                       setChecked(true);
+                      recordQuiz(id, correct);
                       if (correct) markComplete(id);
                     }}
                   >
@@ -210,7 +219,9 @@ export default function LearningPage({ id }: { id: number }) {
             )}
           </div>
           <footer className="book-page-footer">
-            <span>每次弄懂一个问题，就是进步。</span>
+            <Link href={`/review?chapter=${id}`}>
+              拆解思路，做一次复盘 <ArrowUpRight size={13} />
+            </Link>
             <span>0{page + 1} / 02</span>
           </footer>
         </section>

@@ -1665,3 +1665,1172 @@ svg {
     font-size: 11px;
   }
 }
+
+/* Foliom reference: copied motion geometry, isolated class names and our covers. */
+.folio-home {
+  --folio-width: 200px;
+  --folio-height: 286px;
+  --folio-overlap: 115px;
+  --folio-push: 60px;
+  position: relative;
+  isolation: isolate;
+  min-height: 940px;
+  height: 100svh;
+  overflow: hidden;
+  background: #050605;
+  color: #f5f1e8;
+}
+.folio-home::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    linear-gradient(#ffffff03 1px, transparent 1px),
+    linear-gradient(90deg, #ffffff03 1px, transparent 1px);
+  background-size: 4px 4px;
+}
+.folio-nav {
+  position: relative;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px 48px;
+  gap: 30px;
+  max-width: 1760px;
+  margin: auto;
+}
+.folio-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font:
+    23px 'Instrument Serif',
+    'Songti SC',
+    serif;
+  white-space: nowrap;
+}
+.folio-nav nav {
+  display: flex;
+  gap: 32px;
+  font-size: 14px;
+  color: #d7d8cf;
+}
+.folio-nav a:hover {
+  color: white;
+}
+.folio-nav-cta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 22px;
+  background: #eeede5;
+  color: #121915 !important;
+  border-radius: 100px;
+  font-size: 14px;
+}
+.folio-copy {
+  position: relative;
+  z-index: 20;
+  text-align: center;
+  padding: 35px 24px 0;
+  pointer-events: none;
+}
+.folio-copy > * {
+  pointer-events: auto;
+}
+.folio-eyebrow {
+  font-size: 12px;
+  letter-spacing: 3px;
+  color: #adb5a7;
+  margin: 0 0 17px;
+}
+.folio-copy h1 {
+  font:
+    400 clamp(46px, 4.6vw, 76px)/1.22 'Instrument Serif',
+    'Songti SC',
+    'SimSun',
+    serif;
+  letter-spacing: -1px;
+  margin: 0;
+}
+.folio-copy h1 em {
+  font-style: normal;
+}
+.folio-hook {
+  font-size: 18px;
+  line-height: 1.6;
+  margin: 19px 0 6px;
+  color: #dddccf;
+  text-wrap: balance;
+}
+.folio-tension {
+  font-size: 14px;
+  line-height: 1.8;
+  color: #969f92;
+  margin: 0 0 21px;
+  text-wrap: balance;
+}
+.folio-entry {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 25px;
+  max-width: 350px;
+  margin: auto;
+  border: 1px solid #e4e8d43b;
+  background: #151b13c9;
+  backdrop-filter: blur(8px);
+  border-radius: 100px;
+  padding: 7px 7px 7px 24px;
+  font-size: 15px;
+}
+.folio-entry > span {
+  display: grid;
+  place-items: center;
+  background: #e7ead9;
+  color: #19241a;
+  border-radius: 100%;
+  width: 40px;
+  height: 40px;
+  transition: transform 0.25s;
+}
+.folio-entry:hover > span {
+  transform: rotate(-30deg);
+}
+.folio-description {
+  font-size: 14px;
+  line-height: 1.9;
+  color: #aeb6a4;
+  margin: 16px 0 0;
+}
+.folio-marquee {
+  position: absolute;
+  top: 77%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-7deg);
+  width: 140vw;
+  height: calc(286px + 40vw);
+  z-index: 10;
+  pointer-events: none;
+}
+.folio-mask {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  mask-image: linear-gradient(
+    90deg,
+    transparent,
+    black 10%,
+    black 90%,
+    transparent
+  );
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    transparent,
+    black 10%,
+    black 90%,
+    transparent
+  );
+}
+.folio-track {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  display: flex;
+  align-items: center;
+  width: max-content;
+  padding: 60px 0;
+  animation: folio-scroll 55s linear infinite;
+  will-change: transform;
+}
+.folio-group {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+.folio-marquee:has(.folio-book:hover) .folio-track,
+.folio-marquee:focus-within .folio-track,
+.folio-marquee.is-paused .folio-track {
+  animation-play-state: paused;
+}
+@keyframes folio-scroll {
+  from {
+    transform: translate(0, -50%);
+  }
+  to {
+    transform: translate(calc(-100% / 3), -50%);
+  }
+}
+.folio-book-wrap {
+  position: relative;
+  width: var(--folio-width);
+  height: var(--folio-height);
+  flex-shrink: 0;
+  margin-right: calc(-1 * var(--folio-overlap));
+  transition: transform 500ms cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.folio-book-wrap:has(.folio-book:is(:hover, :focus)) {
+  z-index: 9999 !important;
+}
+.folio-book-wrap:has(~ .folio-book-wrap .folio-book:is(:hover, :focus)) {
+  transform: translateX(calc(-1 * var(--folio-push)));
+}
+.folio-book-wrap:has(.folio-book:is(:hover, :focus)) ~ .folio-book-wrap {
+  transform: translateX(var(--folio-push));
+}
+.folio-book {
+  position: relative;
+  display: block;
+  height: var(--folio-height);
+  width: calc(var(--folio-width) + var(--folio-depth) + 1.1px);
+  cursor: pointer;
+  transform: rotate(7deg);
+  transition: transform 450ms cubic-bezier(0.2, 0.7, 0.2, 1);
+  will-change: transform;
+  pointer-events: auto;
+  -webkit-tap-highlight-color: transparent;
+}
+.folio-book:is(:hover, :focus) {
+  transform: rotate(7deg) translateY(-28px) scale(1.06);
+  z-index: 100;
+}
+.folio-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--folio-width);
+  height: var(--folio-height);
+  border-radius: 3px;
+  transform-origin: 0 0;
+}
+.folio-back {
+  background: var(--folio-color);
+  box-shadow:
+    inset 0 0 0 1px #0009,
+    inset 2px 0 6px #0008,
+    inset -2px 0 6px #0008;
+  z-index: 1;
+  filter: brightness(0.7);
+}
+.folio-paper {
+  top: 4px;
+  height: calc(100% - 8px);
+  background: linear-gradient(
+    90deg,
+    #8a7649 0%,
+    #c9b88a 6%,
+    #f3e7c9 22%,
+    #fbf3dc 50%,
+    #f3e7c9 78%,
+    #c9b88a 94%,
+    #8a7649 100%
+  );
+  box-shadow:
+    inset 0 1px 0 #fff6,
+    inset 0 -1px 0 #785a4040;
+}
+.folio-front {
+  z-index: 1000;
+  background-color: var(--folio-color);
+  background-size: cover;
+  background-position: center;
+  transform: skewY(30deg);
+  box-shadow:
+    0 0 0 1px #0005,
+    inset 0 0 0 1px #ffffff0f,
+    inset 8px 0 18px -8px #0008,
+    inset -3px 0 8px -4px #ffffff14,
+    8px 16px 30px #0009;
+}
+.folio-front::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    #0005,
+    transparent 6%,
+    transparent 94%,
+    #ffffff1a
+  );
+  border-radius: inherit;
+}
+.folio-hinge {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 5px;
+  background: var(--folio-color);
+  box-shadow:
+    inset 0 1px 0 #ffffff14,
+    inset 0 -1px 0 #0009,
+    0 1px 2px #0006;
+  border-radius: 1px;
+  z-index: 0;
+  filter: brightness(0.6);
+}
+.folio-footer {
+  position: absolute;
+  z-index: 25;
+  bottom: 25px;
+  left: 48px;
+  right: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  font-size: 12px;
+  color: #cbd1c1;
+}
+.folio-footer > span {
+  padding: 10px 0;
+  text-shadow: 0 1px 8px #000;
+}
+.folio-footer button {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  border-radius: 100px;
+  padding: 11px 17px;
+  backdrop-filter: blur(12px);
+  background: #080c08bd;
+}
+.explore-poster {
+  padding: 0;
+  background: none;
+  text-align: inherit;
+}
+.study-clock-status {
+  font-size: 11px;
+  color: #7e8873;
+}
+.review-entry {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: #415841;
+}
+.book-page-footer a {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+}
+/* The review desk uses the existing paper learning theme. */
+.review-page {
+  --background: #fffefa;
+  --foreground: #28392f;
+  --muted: #e5e8de;
+  --muted-foreground: #6b796d;
+  --border: #dce1d6;
+  --primary: #355e7b;
+  --popover: #fffefa;
+  --popover-foreground: #28392f;
+  --accent: #e9eee3;
+  --input: #c8d1c2;
+  min-height: 100svh;
+  background: #eef0e8;
+  color: #293830;
+}
+.review-nav {
+  max-width: 1260px;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  gap: 35px;
+  padding: 29px 30px;
+  border-bottom: 1px solid #d9dfd1;
+}
+.review-nav > a:nth-child(2) {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-left: auto;
+  font-size: 14px;
+}
+.review-nav > span {
+  font-size: 12px;
+  color: #818b7d;
+}
+.review-shell {
+  max-width: 1260px;
+  margin: auto;
+  padding: 46px 30px 0;
+}
+.review-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 25px;
+  margin-bottom: 32px;
+}
+.review-kicker {
+  font-size: 11px;
+  letter-spacing: 3px;
+  color: #88917e;
+  margin: 0 0 15px;
+}
+.review-heading h1 {
+  font:
+    400 clamp(30px, 3.2vw, 43px)/1.5 'Songti SC',
+    'SimSun',
+    serif;
+  letter-spacing: -0.7px;
+  margin: 0;
+}
+.review-heading h1 em {
+  font-style: normal;
+  color: #54715c;
+}
+.review-heading > div > p:last-child,
+.review-workspace-heading > div > p:last-child {
+  font-size: 15px;
+  line-height: 1.7;
+  color: #7a8576;
+  margin: 12px 0 0;
+}
+.review-primary {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  padding: 14px 23px;
+  border-radius: 100px;
+  background: #344e3c;
+  color: #fffef4;
+  font-size: 14px;
+  white-space: nowrap;
+}
+.review-notice {
+  border: 1px solid #cdb68d;
+  background: #faf1df;
+  padding: 14px 18px;
+  font-size: 14px;
+  border-radius: 12px;
+}
+.review-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.review-stats article {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 23px 23px 21px;
+  border: 1px solid #dde2d6;
+  border-radius: 16px;
+  background: #fafbf6;
+}
+.review-stats article > svg {
+  position: absolute;
+  right: 22px;
+  top: 23px;
+  color: #93a18f;
+}
+.review-stats article > span {
+  font-size: 14px;
+  color: #657660;
+  padding-right: 25px;
+}
+.review-stats strong {
+  font:
+    400 32px/1.3 'Instrument Serif',
+    'Songti SC',
+    serif;
+  letter-spacing: -0.5px;
+  margin: 17px 0 11px;
+  white-space: nowrap;
+}
+.review-stats strong i {
+  font-size: 19px;
+  font-style: normal;
+  color: #9aa391;
+}
+.review-stats small {
+  font-size: 12px;
+  line-height: 1.6;
+  color: #89917d;
+}
+.review-chart-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.65fr;
+  gap: 24px;
+}
+.review-panel {
+  border: 1px solid #dce1d5;
+  background: #fafbf7;
+  border-radius: 18px;
+  padding: 27px;
+}
+.review-panel-title {
+  display: flex;
+  align-items: flex-start;
+  gap: 13px;
+}
+.review-panel-title > span {
+  font:
+    24px 'Instrument Serif',
+    serif;
+  color: #a7b29c;
+  padding-top: 2px;
+}
+.review-panel h2 {
+  font-weight: 500;
+  font-size: 19px;
+  margin: 0 0 8px;
+}
+.review-panel-title p {
+  font-size: 13px;
+  color: #89917e;
+  margin: 0;
+  line-height: 1.6;
+}
+.review-pie {
+  height: 225px !important;
+  width: 100%;
+  aspect-ratio: auto !important;
+}
+.review-trend {
+  height: 285px !important;
+  width: 100%;
+  aspect-ratio: auto !important;
+  margin-top: 20px;
+}
+.review-chart-empty {
+  min-height: 225px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 10px;
+  color: #9aa791;
+  text-align: center;
+}
+.review-chart-empty p {
+  font-size: 14px;
+  line-height: 1.9;
+  margin: 0;
+}
+.review-chart-empty.wide {
+  min-height: 285px;
+}
+.review-legend {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  display: grid;
+  gap: 13px;
+}
+.review-legend li {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 13px;
+  color: #718068;
+}
+.review-legend li > span {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+}
+.review-legend strong {
+  margin-left: auto;
+  font-size: 13px;
+  font-weight: 500;
+  color: #54634b;
+}
+.review-trend-key {
+  display: flex;
+  justify-content: center;
+  gap: 23px;
+  font-size: 12px;
+  color: #355e7b;
+  margin: 7px 0 14px;
+}
+.review-trend-key > span:last-child {
+  color: #bd8452;
+}
+.review-caption {
+  font-size: 12px;
+  color: #8e9783;
+  text-align: center;
+  line-height: 1.7;
+  margin: 0;
+}
+.review-method {
+  margin-top: 18px;
+  padding: 0 3px;
+  color: #8b9481;
+  font-size: 12px;
+  line-height: 1.9;
+}
+.review-method summary {
+  cursor: pointer;
+  width: fit-content;
+}
+.review-method p {
+  max-width: 1000px;
+  font-size: 13px;
+}
+.review-workspace {
+  padding: 39px 0 33px;
+  border-top: 1px solid #d4dccd;
+  border-bottom: 1px solid #d4dccd;
+  margin-top: 38px;
+}
+.review-workspace-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 25px;
+  margin-bottom: 26px;
+}
+.review-workspace-heading h2 {
+  font:
+    400 27px/1.5 'Songti SC',
+    'SimSun',
+    serif;
+  margin: 0;
+}
+.review-workspace-heading .review-kicker {
+  margin-bottom: 10px;
+}
+.review-select {
+  min-width: 205px;
+  min-height: 43px;
+  background: #fffef7;
+  border: 1px solid #cbd4c2 !important;
+  padding: 10px 14px !important;
+  color: #43543c;
+}
+.review-select-menu {
+  background: #fffef8 !important;
+  color: #36442f !important;
+  padding: 6px;
+  border: 1px solid #d1dac7;
+}
+.review-select-menu [data-slot='select-item'] {
+  padding: 10px 24px 10px 10px !important;
+}
+.review-select-menu [data-slot='select-item']:hover {
+  background: #ebefdf;
+}
+.review-thinking-progress {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 22px;
+  font-size: 13px;
+  color: #697a60;
+}
+.review-thinking-progress [data-slot='progress'] {
+  width: 140px;
+  flex-shrink: 0;
+}
+.review-thinking-progress small {
+  margin-left: auto;
+  font-size: 12px;
+  color: #8c9681;
+}
+.review-mindmap {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 13px;
+}
+.review-thought {
+  padding: 19px;
+  background: #f9faf4;
+  border: 1px solid #d6dfce;
+  border-radius: 13px;
+}
+.review-thought > div {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.review-thought > div > span {
+  font:
+    21px 'Instrument Serif',
+    serif;
+  color: #99a98b;
+}
+.review-thought > div > svg {
+  margin-left: auto;
+  color: #9aaa8f;
+}
+.review-thought h3 {
+  font-size: 16px;
+  font-weight: 500;
+  margin: 0;
+}
+.review-thought label {
+  display: block;
+  font-size: 13px;
+  color: #8a947d;
+  line-height: 1.8;
+  min-height: 49px;
+}
+.review-thought textarea {
+  width: 100%;
+  min-height: 135px;
+  border: 0;
+  border-top: 1px solid #e3e8da;
+  padding: 13px 0 0;
+  background: none;
+  resize: vertical;
+  color: #405137;
+  font-size: 14px;
+  line-height: 1.8;
+  margin-top: 13px;
+  border-radius: 0;
+}
+.review-thought textarea::placeholder {
+  color: #b0b8a4;
+}
+.review-save-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 18px;
+  font-size: 12px;
+  color: #939d88;
+}
+.review-save-line button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 15px;
+  background: #e1e8d7;
+  color: #597045;
+  border-radius: 8px;
+  font-size: 13px;
+}
+.review-output-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 24px;
+  margin-top: 33px;
+}
+.review-flashcard {
+  display: block;
+  width: 100%;
+  position: relative;
+  min-height: 325px;
+  margin-top: 25px;
+  text-align: left;
+  border-radius: 12px;
+  padding: 26px 29px;
+  background: #314438;
+  color: #f1f3e6;
+  box-shadow: 0 10px 20px #28391f10;
+  transition: background 0.3s;
+}
+.review-flashcard:hover {
+  background: #3b5142;
+}
+.review-flashcard.is-flipped {
+  background: #eaf0df;
+  color: #405232;
+  border: 1px solid #d4dfc5;
+}
+.review-card-index {
+  display: block;
+  font-size: 11px;
+  letter-spacing: 1px;
+  opacity: 0.6;
+  margin-bottom: 22px;
+}
+.review-flashcard h3 {
+  font:
+    400 23px/1.65 'Songti SC',
+    serif;
+  max-width: 450px;
+  margin: 13px 0;
+}
+.review-flashcard p {
+  font-size: 13px;
+  line-height: 1.9;
+  opacity: 0.7;
+  margin: 0 0 25px;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+.review-flashcard ul {
+  font-size: 14px;
+  line-height: 1.8;
+  padding-left: 19px;
+  margin: 0 0 20px;
+}
+.review-card-turn {
+  display: flex;
+  gap: 9px;
+  align-items: center;
+  font-size: 12px;
+  opacity: 0.65;
+}
+.review-source {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #8b987e;
+  font-size: 12px;
+  margin-top: 16px;
+}
+.review-next-empty {
+  padding: 27px 10px 24px;
+  color: #8b9a7f;
+}
+.review-next-empty h3 {
+  font-size: 17px;
+  font-weight: 500;
+  color: #4e6143;
+  margin: 15px 0 10px;
+}
+.review-next-empty p {
+  font-size: 14px;
+  line-height: 1.8;
+  margin: 0 0 19px;
+  color: #8a957e;
+}
+.review-next-empty a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #4f6b3b;
+  font-size: 14px;
+}
+.review-personal-note {
+  border-top: 1px solid #e0e7d7;
+  padding-top: 21px;
+  margin-top: 13px;
+}
+.review-personal-note h3 {
+  font-size: 13px;
+  font-weight: 500;
+  color: #6c7f5d;
+  margin: 0 0 12px;
+}
+.review-personal-note p {
+  font-size: 14px;
+  color: #939d87;
+  line-height: 1.9;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  margin: 0;
+}
+.review-return-list {
+  list-style: none;
+  padding: 0;
+  margin: 19px 0;
+  max-height: 280px;
+  overflow: auto;
+}
+.review-return-list li + li {
+  border-top: 1px solid #e3e8da;
+}
+.review-return-list a {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 15px 0;
+}
+.review-return-list a > span {
+  font:
+    22px 'Instrument Serif',
+    serif;
+  color: #acb49e;
+}
+.review-return-list strong {
+  font-size: 14px;
+  font-weight: 500;
+}
+.review-return-list small {
+  display: block;
+  font-size: 12px;
+  color: #a49b7e;
+  margin-top: 5px;
+}
+.review-return-list svg {
+  margin-left: auto;
+  color: #9fae8d;
+}
+.review-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  font-size: 12px;
+  color: #9aa48d;
+  padding: 29px 0;
+}
+@media (max-width: 1000px) {
+  .folio-nav {
+    padding: 25px 30px;
+  }
+  .folio-nav nav {
+    gap: 18px;
+  }
+  .folio-home {
+    min-height: 910px;
+  }
+  .folio-copy {
+    padding-top: 42px;
+  }
+  .review-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .review-chart-grid {
+    grid-template-columns: 1fr 1.2fr;
+  }
+  .review-mindmap {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .review-heading {
+    align-items: flex-start;
+  }
+  .review-heading h1 em {
+    display: block;
+  }
+  .review-panel {
+    padding: 23px;
+  }
+}
+@media (max-width: 768px) {
+  .folio-home {
+    --folio-width: 140px;
+    --folio-height: 200px;
+    --folio-overlap: 90px;
+    --folio-push: 30px;
+    min-height: 880px;
+  }
+  .folio-nav {
+    padding: 22px 24px;
+  }
+  .folio-nav nav {
+    display: none;
+  }
+  .folio-brand {
+    font-size: 20px;
+  }
+  .folio-nav-cta {
+    padding: 11px 15px;
+    font-size: 13px;
+  }
+  .folio-copy {
+    padding: 40px 23px 0;
+  }
+  .folio-copy h1 {
+    font-size: clamp(32px, 5.9vw, 46px);
+    line-height: 1.35;
+  }
+  .folio-hook {
+    font-size: 16px;
+  }
+  .folio-tension {
+    font-size: 14px;
+  }
+  .folio-marquee {
+    top: 77%;
+    height: calc(200px + 30vw);
+  }
+  .folio-footer {
+    left: 24px;
+    right: 24px;
+  }
+  .review-nav {
+    padding: 22px;
+  }
+  .review-nav > span {
+    display: none;
+  }
+  .review-shell {
+    padding: 30px 22px 0;
+  }
+  .review-heading {
+    display: block;
+  }
+  .review-heading .review-primary {
+    width: fit-content;
+    margin-top: 23px;
+  }
+  .review-chart-grid,
+  .review-output-grid {
+    grid-template-columns: 1fr;
+  }
+  .review-thinking-progress {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .review-thinking-progress small {
+    margin-left: 0;
+    width: 100%;
+  }
+  .review-workspace-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .review-trend {
+    height: 245px !important;
+  }
+  .review-trend-key {
+    font-size: 12px;
+  }
+  .review-footer {
+    flex-direction: column;
+    gap: 9px;
+  }
+  .review-stats {
+    gap: 12px;
+  }
+  .review-stats article {
+    padding: 20px 16px;
+  }
+  .review-stats article > svg {
+    right: 13px;
+    top: 21px;
+    width: 16px;
+  }
+  .review-stats strong {
+    font-size: 28px;
+  }
+  .review-stats small {
+    font-size: 12px;
+  }
+  .review-page .brand {
+    font-size: 17px;
+  }
+  .review-heading h1 {
+    font-size: 32px;
+  }
+  .review-workspace-heading h2 {
+    font-size: 25px;
+  }
+}
+@media (max-width: 480px) {
+  .folio-home {
+    --folio-width: 110px;
+    --folio-height: 157px;
+    --folio-overlap: 70px;
+    --folio-push: 20px;
+    min-height: 835px;
+  }
+  .folio-nav {
+    padding: 20px 18px;
+    gap: 12px;
+  }
+  .folio-brand {
+    gap: 8px;
+    font-size: 17px;
+  }
+  .folio-brand svg {
+    width: 21px;
+  }
+  .folio-nav-cta {
+    font-size: 12px;
+    padding: 10px 13px;
+  }
+  .folio-copy {
+    padding: 38px 20px 0;
+  }
+  .folio-copy h1 {
+    font-size: clamp(26px, 7.6vw, 35px);
+    letter-spacing: -0.5px;
+    line-height: 1.42;
+  }
+  .folio-eyebrow {
+    font-size: 11px;
+    letter-spacing: 1px;
+  }
+  .folio-hook {
+    font-size: 15px;
+    max-width: 315px;
+    margin: 19px auto 9px;
+  }
+  .folio-tension {
+    max-width: 290px;
+    margin: 0 auto 22px;
+    line-height: 1.9;
+  }
+  .folio-description {
+    font-size: 13px;
+    line-height: 1.9;
+  }
+  .folio-entry {
+    max-width: 300px;
+    font-size: 14px;
+  }
+  .folio-footer {
+    left: 18px;
+    right: 18px;
+    bottom: 20px;
+    gap: 8px;
+    font-size: 10px;
+  }
+  .folio-footer button {
+    padding: 10px 11px;
+    font-size: 11px;
+  }
+  .folio-marquee {
+    top: 78%;
+    height: calc(157px + 40vw);
+  }
+  .review-shell {
+    padding: 28px 16px 0;
+  }
+  .review-stats strong {
+    font-size: 25px;
+  }
+  .review-stats article > span {
+    font-size: 12px;
+  }
+  .review-stats article > svg {
+    display: none;
+  }
+  .review-mindmap {
+    grid-template-columns: 1fr;
+  }
+  .review-thought label {
+    min-height: 0;
+  }
+  .review-thought textarea {
+    min-height: 105px;
+  }
+  .review-panel {
+    padding: 23px 19px;
+  }
+  .review-flashcard {
+    padding: 24px;
+  }
+  .review-save-line {
+    gap: 15px;
+  }
+  .review-save-line > span {
+    max-width: 160px;
+    line-height: 1.8;
+  }
+  .study-clock-status {
+    display: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .folio-track {
+    animation: none;
+    transform: translate(0, -50%);
+  }
+  .folio-book,
+  .folio-book-wrap {
+    transition: none;
+  }
+  .folio-footer button {
+    display: none;
+  }
+  .review-flashcard {
+    transition: none;
+  }
+}

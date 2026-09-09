@@ -26,13 +26,138 @@ export const stages = [
   },
 ];
 export const stageFor = (id: number) => stages[id <= 3 ? 0 : id <= 8 ? 1 : 2];
-type Progress = {
+export type Reflection = {
+  problem: string;
+  evidence: string;
+  judgment: string;
+  next: string;
+  updatedAt: number;
+};
+export type QuizRecord = {
+  attempts: number;
+  first: { correct: boolean; at: number };
+  latest: { correct: boolean; at: number };
+};
+export type Metrics = {
+  timeByDay: Record<string, Record<string, number>>;
+  quizzes: Record<string, QuizRecord>;
+  quizByDay: Record<string, { attempts: number; correct: number }>;
+  reflections: Record<string, Reflection>;
+};
+const emptyMetrics = (): Metrics => ({
+  timeByDay: {},
+  quizzes: {},
+  quizByDay: {},
+  reflections: {},
+});
+export const localDay = (at: number) => {
+  const d = new Date(at);
+  return `${d.getFullYear()}-${number(d.getMonth() + 1)}-${number(d.getDate())}`;
+};
+export function splitLocalDays(start: number, end: number) {
+  const parts: Array<{ day: string; ms: number }> = [];
+  if (
+    !Number.isFinite(start) ||
+    !Number.isFinite(end) ||
+    end <= start ||
+    end - start > 86400000
+  )
+    return parts;
+  let cursor = start;
+  while (cursor < end) {
+    const d = new Date(cursor),
+      midnight = new Date(
+        d.getFullYear(),
+        d.getMonth(),
+        d.getDate() + 1,
+      ).getTime();
+    const stop = Math.min(midnight, end);
+    parts.push({ day: localDay(cursor), ms: stop - cursor });
+    cursor = stop;
+  }
+  return parts;
+}
+function normalizeMetrics(raw: unknown): Metrics {
+  const result = emptyMetrics();
+  if (!raw || typeof raw !== 'object') return result;
+  const m = raw as Partial<Metrics>;
+  if (m.timeByDay && typeof m.timeByDay === 'object')
+    for (const day of Object.keys(m.timeByDay).sort().slice(-400)) {
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(day)) continue;
+      const row = m.timeByDay[day];
+      if (!row || typeof row !== 'object') continue;
+      const clean: Record<string, number> = {};
+      for (let id = 1; id <= TOTAL; id++) {
+        const v = row[id];
+        if (Number.isFinite(v) && v > 0) clean[id] = Math.min(86400000, v);
+      }
+      if (Object.keys(clean).length) result.timeByDay[day] = clean;
+    }
+  const validAttempt = (a: unknown): a is QuizRecord['first'] =>
+    !!a &&
+    typeof a === 'object' &&
+    typeof (a as QuizRecord['first']).correct === 'boolean' &&
+    Number.isFinite((a as QuizRecord['first']).at);
+  if (m.quizzes && typeof m.quizzes === 'object')
+    for (let id = 1; id <= TOTAL; id++) {
+      const q = m.quizzes[id];
+      if (
+        q &&
+        Number.isInteger(q.attempts) &&
+        q.attempts > 0 &&
+        validAttempt(q.first) &&
+        validAttempt(q.latest)
+      )
+        result.quizzes[id] = {
+          attempts: q.attempts,
+          first: { correct: q.first.correct, at: q.first.at },
+          latest: { correct: q.latest.correct, at: q.latest.at },
+        };
+    }
+  if (m.quizByDay && typeof m.quizByDay === 'object')
+    for (const day of Object.keys(m.quizByDay).sort().slice(-400)) {
+      const q = m.quizByDay[day];
+      if (
+        /^\d{4}-\d{2}-\d{2}$/.test(day) &&
+        q &&
+        Number.isInteger(q.attempts) &&
+        q.attempts > 0 &&
+        Number.isInteger(q.correct) &&
+        q.correct >= 0 &&
+        q.correct <= q.attempts
+      )
+        result.quizByDay[day] = { attempts: q.attempts, correct: q.correct };
+    }
+  if (m.reflections && typeof m.reflections === 'object')
+    for (let id = 1; id <= TOTAL; id++) {
+      const r = m.reflections[id];
+      if (!r || typeof r !== 'object') continue;
+      result.reflections[id] = {
+        problem: typeof r.problem === 'string' ? r.problem.slice(0, 1500) : '',
+        evidence:
+          typeof r.evidence === 'string' ? r.evidence.slice(0, 1500) : '',
+        judgment:
+          typeof r.judgment === 'string' ? r.judgment.slice(0, 1500) : '',
+        next: typeof r.next === 'string' ? r.next.slice(0, 1500) : '',
+        updatedAt: Number.isFinite(r.updatedAt) ? r.updatedAt : 0,
+      };
+    }
+  return result;
+}
+export type Progress = {
   completed: number[];
   notes: Record<string, string>;
   last: number;
   available: boolean;
+  metrics: Metrics;
 };
-const EMPTY: Progress = { completed: [], notes: {}, last: 1, available: true };
+const EMPTY: Progress = {
+  completed: [],
+  notes: {},
+  last: 1,
+  available: true,
+  metrics: emptyMetrics(),
+};
 const KEY = 'ai-learning-atlas:v1';
 let snapshot: Progress | undefined;
 const listeners = new Set<() => void>();
@@ -63,6 +188,7 @@ export function normalizeProgress(raw: unknown): Progress {
         ? v.last
         : 1,
     available: true,
+    metrics: normalizeMetrics(v.metrics),
   };
 }
 function getSnapshot() {
@@ -140,3 +266,89 @@ export const useReducedMotion = () =>
     () => window.matchMedia('(prefers-reduced-motion: reduce)').matches,
     () => true,
   );
+
+export const recordStudyTime = (id: number, start: number, end: number) => {
+  if (!Number.isInteger(id) || id < 1 || id > TOTAL || end - start > 15000)
+    return;
+  const parts = splitLocalDays(start, end);
+  if (!parts.length) return;
+  update((p) => {
+    const timeByDay = { ...p.metrics.timeByDay };
+    for (const part of parts)
+      timeByDay[part.day] = {
+        ...timeByDay[part.day],
+        [id]: (timeByDay[part.day]?.[id] || 0) + part.ms,
+      };
+    return { ...p, metrics: { ...p.metrics, timeByDay } };
+  });
+};
+export const recordQuiz = (id: number, correct: boolean, at = Date.now()) => {
+  if (
+    !Number.isInteger(id) ||
+    id < 1 ||
+    id > TOTAL ||
+    typeof correct !== 'boolean' ||
+    !Number.isFinite(at)
+  )
+    return;
+  update((p) => {
+    const existing = p.metrics.quizzes[id],
+      attempt = { correct, at },
+      day = localDay(at),
+      daily = p.metrics.quizByDay[day] || { attempts: 0, correct: 0 };
+    return {
+      ...p,
+      metrics: {
+        ...p.metrics,
+        quizzes: {
+          ...p.metrics.quizzes,
+          [id]: {
+            attempts: (existing?.attempts || 0) + 1,
+            first: existing?.first || attempt,
+            latest: attempt,
+          },
+        },
+        quizByDay: {
+          ...p.metrics.quizByDay,
+          [day]: {
+            attempts: daily.attempts + 1,
+            correct: daily.correct + Number(correct),
+          },
+        },
+      },
+    };
+  });
+};
+export const saveReflection = (
+  id: number,
+  field: keyof Omit<Reflection, 'updatedAt'>,
+  value: string,
+) => {
+  if (
+    !Number.isInteger(id) ||
+    id < 1 ||
+    id > TOTAL ||
+    !['problem', 'evidence', 'judgment', 'next'].includes(field)
+  )
+    return;
+  update((p) => ({
+    ...p,
+    metrics: {
+      ...p.metrics,
+      reflections: {
+        ...p.metrics.reflections,
+        [id]: {
+          ...(p.metrics.reflections[id] ?? {
+            problem: '',
+            evidence: '',
+            judgment: '',
+            next: '',
+            updatedAt: 0,
+          }),
+          [field]: value.slice(0, 1500),
+          updatedAt: Date.now(),
+        },
+      },
+    },
+  }));
+};

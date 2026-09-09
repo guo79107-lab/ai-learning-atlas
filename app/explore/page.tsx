@@ -252,9 +252,9 @@ export default function Explore() {
             const d = wrap(i - active + 5) - 5;
             const hidden = Math.abs(d) > 1;
             return (
-              <Link
+              <button
+                type="button"
                 key={l.id}
-                href={`/learn/${l.id}`}
                 tabIndex={i === active ? 0 : -1}
                 aria-hidden={hidden}
                 className={`explore-poster ${i === active ? 'current' : ''}`}
@@ -265,12 +265,7 @@ export default function Explore() {
                   visibility: hidden ? 'hidden' : 'visible',
                   transitionDuration: reduced ? '0ms' : '650ms',
                 }}
-                onClick={(e) => {
-                  if (i !== active) {
-                    e.preventDefault();
-                    select(i);
-                  }
-                }}
+                onClick={() => select(i)}
               >
                 <Image
                   unoptimized
@@ -279,7 +274,7 @@ export default function Explore() {
                   width={1086}
                   height={1448}
                 />
-              </Link>
+              </button>
             );
           })}
         </section>
