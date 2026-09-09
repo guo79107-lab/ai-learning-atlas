@@ -1,7 +1,7 @@
 'use client';
 import { sitePath } from './site-config';
 import { useEffect, useRef, useState } from 'react';
-import Link from 'next/link';
+import Link from './site-link';
 import Image from 'next/image';
 import {
   ArrowRight,
