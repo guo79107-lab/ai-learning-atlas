@@ -2,6 +2,7 @@
 import { sitePath } from './site-config';
 import { useEffect, useState } from 'react';
 import Link from './site-link';
+import DiscussionLab from './discussion-lab';
 import { useLearningActivity } from './learning-activity';
 import Image from 'next/image';
 import {
@@ -29,9 +30,14 @@ export default function LearningPage({ id }: { id: number }) {
   const [page, setPage] = useState(0),
     [choice, setChoice] = useState<number | null>(null),
     [checked, setChecked] = useState(false);
+  /* oxlint-disable react/react-compiler */
   useEffect(() => {
     rememberChapter(id);
+    // The review desk can return directly to this chapter's discussion exercise.
+    if (new URLSearchParams(location.search).get('tab') === 'discussion')
+      setPage(2);
   }, [id]);
+  /* oxlint-enable react/react-compiler */
   const done = progress.completed.includes(id),
     correct = choice === lesson.answer;
   return (
@@ -108,6 +114,9 @@ export default function LearningPage({ id }: { id: number }) {
             <button aria-pressed={page === 1} onClick={() => setPage(1)}>
               02 试一试
             </button>
+            <button aria-pressed={page === 2} onClick={() => setPage(2)}>
+              03 观点练习
+            </button>
           </nav>
           <div className="turning-page" key={page}>
             {page === 0 ? (
@@ -132,6 +141,8 @@ export default function LearningPage({ id }: { id: number }) {
                   翻到练习页 <ArrowRight size={18} />
                 </button>
               </>
+            ) : page === 2 ? (
+              <DiscussionLab id={id} />
             ) : (
               <>
                 <fieldset className="quiz">
@@ -207,6 +218,14 @@ export default function LearningPage({ id }: { id: number }) {
                   </small>
                 </details>
                 {checked && correct && (
+                  <button
+                    className="learn-secondary"
+                    onClick={() => setPage(2)}
+                  >
+                    把方法用在一段观点里 <ArrowRight size={16} />
+                  </button>
+                )}
+                {checked && correct && (
                   <Link
                     className="learn-primary"
                     href={id === 11 ? '/explore' : `/learn/${id + 1}`}
@@ -222,7 +241,7 @@ export default function LearningPage({ id }: { id: number }) {
             <Link href={`/review?chapter=${id}`}>
               拆解思路，做一次复盘 <ArrowUpRight size={13} />
             </Link>
-            <span>0{page + 1} / 02</span>
+            <span>0{page + 1} / 03</span>
           </footer>
         </section>
       </article>

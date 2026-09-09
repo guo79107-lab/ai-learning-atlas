@@ -8,6 +8,10 @@ globalThis.localStorage = {
 };
 const {
   normalizeProgress,
+  saveDiscussion,
+  switchDiscussionMode,
+  completeDiscussion,
+  zhihuSourceUrl,
   recordQuiz,
   recordStudyTime,
   saveReflection,
@@ -32,6 +36,7 @@ test('existing completion and notes survive without invented historical metrics'
     quizzes: {},
     quizByDay: {},
     reflections: {},
+    discussions: {},
   });
 });
 test('first and latest judgment remain distinct across retries', () => {
@@ -129,4 +134,119 @@ test('invalid or non-finite metrics do not appear in charts', () => {
   assert.deepEqual(p.metrics.timeByDay, {});
   assert.deepEqual(p.metrics.quizzes, {});
   assert.deepEqual(p.completed, [1]);
+});
+
+test('discussion drafts and completion preserve course records and invalidate after edits', () => {
+  reset({ completed: [4], notes: { 4: '我的原笔记' } });
+  saveDiscussion(4, {
+    mode: 'sample',
+    claim: '论断',
+    evidence: '待核查原始出处',
+    counterpoint: '口径是否一致？',
+    revision: '暂缓引用，先核查',
+  });
+  completeDiscussion(4);
+  let p = readProgress();
+  assert.ok(p.metrics.discussions[4].completedAt > 0);
+  assert.equal(p.notes[4], '我的原笔记');
+  assert.deepEqual(p.completed, [4]);
+  assert.deepEqual(p.metrics.quizzes, {});
+  saveDiscussion(4, { evidence: '新的材料' });
+  p = readProgress();
+  assert.equal(p.metrics.discussions[4].completedAt, null);
+  assert.equal(p.metrics.discussions[4].claim, '论断');
+  assert.equal(
+    normalizeProgress(JSON.parse(storage.get(key))).metrics.discussions[4]
+      .evidence,
+    '新的材料',
+  );
+});
+test('Zhihu practice completion requires source and text, untrusted source schemes are rejected', () => {
+  reset();
+  for (const url of [
+    'javascript:alert(1)',
+    'https://www.zhihu.com.evil.test/a',
+    'https://evil.test',
+    'https://user:pass@www.zhihu.com/a',
+  ])
+    assert.equal(zhihuSourceUrl(url), null);
+  assert.equal(
+    zhihuSourceUrl('https://zhuanlan.zhihu.com/p/123'),
+    'https://zhuanlan.zhihu.com/p/123',
+  );
+  saveDiscussion(2, {
+    mode: 'zhihu',
+    claim: '论断',
+    evidence: '依据',
+    counterpoint: '反问',
+    revision: '判断',
+  });
+  completeDiscussion(2);
+  assert.equal(readProgress().metrics.discussions[2].completedAt, null);
+  saveDiscussion(2, {
+    title: '材料标题',
+    excerpt: '选取的原文',
+    url: 'https://www.zhihu.com/question/123/answer/456',
+  });
+  completeDiscussion(2);
+  assert.ok(readProgress().metrics.discussions[2].completedAt > 0);
+  assert.deepEqual(readProgress().metrics.quizByDay, {});
+  saveDiscussion(2, { excerpt: '' });
+  completeDiscussion(2);
+  assert.equal(readProgress().metrics.discussions[2].completedAt, null);
+});
+test('malformed imported discussion records do not invent completion or unsafe links', () => {
+  const p = normalizeProgress({
+    metrics: {
+      discussions: {
+        1: {
+          mode: 'zhihu',
+          title: {},
+          excerpt: 'x'.repeat(5000),
+          completedAt: 1,
+          choice: 9,
+        },
+        12: { completedAt: 1 },
+      },
+    },
+  });
+  assert.equal(p.metrics.discussions[1].title, '');
+  assert.equal(p.metrics.discussions[1].excerpt.length, 3000);
+  assert.equal(p.metrics.discussions[1].choice, null);
+  assert.equal(p.metrics.discussions[1].completedAt, null);
+  assert.equal(p.metrics.discussions[12], undefined);
+});
+
+test('switching sources preserves distinct drafts, citations and completion without rebinding analysis', () => {
+  reset();
+  saveDiscussion(3, {
+    claim: '示例的观点',
+    evidence: '示例的依据',
+    counterpoint: '示例的反问',
+    revision: '示例的修订',
+  });
+  completeDiscussion(3);
+  const completed = readProgress().metrics.discussions[3].completedAt;
+  switchDiscussionMode(3, 'sample');
+  assert.equal(readProgress().metrics.discussions[3].completedAt, completed);
+  switchDiscussionMode(3, 'zhihu');
+  assert.equal(readProgress().metrics.discussions[3].claim, '');
+  assert.equal(readProgress().metrics.discussions[3].completedAt, null);
+  saveDiscussion(3, {
+    url: 'https://zhuanlan.zhihu.com/p/123',
+    title: '原文',
+    excerpt: '摘录',
+    claim: '知乎材料的观点',
+  });
+  switchDiscussionMode(3, 'sample');
+  assert.equal(readProgress().metrics.discussions[3].claim, '示例的观点');
+  assert.equal(readProgress().metrics.discussions[3].completedAt, completed);
+  assert.equal(readProgress().metrics.discussions[3].url, '');
+  switchDiscussionMode(3, 'zhihu');
+  const d = normalizeProgress(JSON.parse(storage.get(key))).metrics
+    .discussions[3];
+  assert.equal(d.claim, '知乎材料的观点');
+  assert.equal(d.url, 'https://zhuanlan.zhihu.com/p/123');
+  assert.equal(d.evidence, '');
+  assert.equal(d.alternate.claim, '示例的观点');
 });

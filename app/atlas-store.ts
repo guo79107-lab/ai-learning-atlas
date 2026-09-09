@@ -38,17 +38,109 @@ export type QuizRecord = {
   first: { correct: boolean; at: number };
   latest: { correct: boolean; at: number };
 };
+export type DiscussionDraft = {
+  mode: 'sample' | 'zhihu';
+  title: string;
+  author: string;
+  url: string;
+  excerpt: string;
+  claim: string;
+  evidence: string;
+  counterpoint: string;
+  revision: string;
+  choice: number | null;
+  completedAt: number | null;
+};
+export type Discussion = DiscussionDraft & { alternate?: DiscussionDraft };
+export const emptyDiscussion = (): Discussion => ({
+  mode: 'sample',
+  title: '',
+  author: '',
+  url: '',
+  excerpt: '',
+  claim: '',
+  evidence: '',
+  counterpoint: '',
+  revision: '',
+  choice: null,
+  completedAt: null,
+});
+export function zhihuSourceUrl(value: string): string | null {
+  try {
+    const u = new URL(value.trim());
+    if (
+      !['https:', 'http:'].includes(u.protocol) ||
+      u.username ||
+      u.password ||
+      !['www.zhihu.com', 'zhihu.com', 'zhuanlan.zhihu.com'].includes(u.hostname)
+    )
+      return null;
+    return u.href;
+  } catch {
+    return null;
+  }
+}
+export function discussionReady(d: Discussion): boolean {
+  return (
+    [d.claim, d.evidence, d.counterpoint, d.revision].every((v) => v.trim()) &&
+    (d.mode === 'sample' ||
+      !!(d.title.trim() && d.excerpt.trim() && zhihuSourceUrl(d.url)))
+  );
+}
+function cleanDiscussionDraft(raw: unknown): DiscussionDraft {
+  const d = emptyDiscussion();
+  if (!raw || typeof raw !== 'object') return d;
+  const r = raw as Partial<Discussion>;
+  for (const key of [
+    'title',
+    'author',
+    'url',
+    'excerpt',
+    'claim',
+    'evidence',
+    'counterpoint',
+    'revision',
+  ] as const)
+    d[key] =
+      typeof r[key] === 'string'
+        ? r[key].slice(
+            0,
+            key === 'excerpt' ? 3000 : key === 'url' ? 1000 : 1500,
+          )
+        : '';
+  d.mode = r.mode === 'zhihu' ? 'zhihu' : 'sample';
+  d.choice = r.choice === 0 || r.choice === 1 ? r.choice : null;
+  d.completedAt =
+    discussionReady(d) &&
+    typeof r.completedAt === 'number' &&
+    Number.isFinite(r.completedAt) &&
+    r.completedAt > 0
+      ? r.completedAt
+      : null;
+  return d;
+}
+function cleanDiscussion(raw: unknown): Discussion {
+  const d: Discussion = cleanDiscussionDraft(raw);
+  if (raw && typeof raw === 'object') {
+    const alternate = (raw as Partial<Discussion>).alternate;
+    if (alternate && typeof alternate === 'object' && alternate.mode !== d.mode)
+      d.alternate = cleanDiscussionDraft(alternate);
+  }
+  return d;
+}
 export type Metrics = {
   timeByDay: Record<string, Record<string, number>>;
   quizzes: Record<string, QuizRecord>;
   quizByDay: Record<string, { attempts: number; correct: number }>;
   reflections: Record<string, Reflection>;
+  discussions: Record<string, Discussion>;
 };
 const emptyMetrics = (): Metrics => ({
   timeByDay: {},
   quizzes: {},
   quizByDay: {},
   reflections: {},
+  discussions: {},
 });
 export const localDay = (at: number) => {
   const d = new Date(at);
@@ -142,6 +234,10 @@ function normalizeMetrics(raw: unknown): Metrics {
         updatedAt: Number.isFinite(r.updatedAt) ? r.updatedAt : 0,
       };
     }
+  if (m.discussions && typeof m.discussions === 'object')
+    for (let id = 1; id <= TOTAL; id++)
+      if (m.discussions[id] && typeof m.discussions[id] === 'object')
+        result.discussions[id] = cleanDiscussion(m.discussions[id]);
   return result;
 }
 export type Progress = {
@@ -351,4 +447,69 @@ export const saveReflection = (
       },
     },
   }));
+};
+
+export const saveDiscussion = (
+  id: number,
+  changes: Partial<Omit<Discussion, 'completedAt'>>,
+) => {
+  if (!Number.isInteger(id) || id < 1 || id > TOTAL) return;
+  update((p) => ({
+    ...p,
+    metrics: {
+      ...p.metrics,
+      discussions: {
+        ...p.metrics.discussions,
+        [id]: cleanDiscussion({
+          ...(p.metrics.discussions[id] ?? emptyDiscussion()),
+          ...changes,
+          completedAt: null,
+        }),
+      },
+    },
+  }));
+};
+export const completeDiscussion = (id: number) => {
+  if (!Number.isInteger(id) || id < 1 || id > TOTAL) return;
+  update((p) => {
+    const d = p.metrics.discussions[id];
+    if (!d || !discussionReady(d)) return p;
+    return {
+      ...p,
+      metrics: {
+        ...p.metrics,
+        discussions: {
+          ...p.metrics.discussions,
+          [id]: { ...d, completedAt: Date.now() },
+        },
+      },
+    };
+  });
+};
+
+export const switchDiscussionMode = (id: number, mode: Discussion['mode']) => {
+  if (
+    !Number.isInteger(id) ||
+    id < 1 ||
+    id > TOTAL ||
+    !['sample', 'zhihu'].includes(mode)
+  )
+    return;
+  update((p) => {
+    const d = p.metrics.discussions[id] ?? emptyDiscussion();
+    if (d.mode === mode) return p;
+    const { alternate, ...previous } = d;
+    const target =
+      alternate?.mode === mode ? alternate : { ...emptyDiscussion(), mode };
+    return {
+      ...p,
+      metrics: {
+        ...p.metrics,
+        discussions: {
+          ...p.metrics.discussions,
+          [id]: { ...target, alternate: previous },
+        },
+      },
+    };
+  });
 };

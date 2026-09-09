@@ -8,12 +8,15 @@ import {
   Clock3,
   Download,
   Lightbulb,
-  NotebookPen,
   Target,
   ChevronRight,
+  MessageCircle,
+  Quote,
 } from 'lucide-react';
 import {
   PieChart,
+  BarChart,
+  Bar,
   Pie,
   LineChart,
   Line,
@@ -43,10 +46,18 @@ import {
   useProgress,
   saveReflection,
   type Reflection,
+  zhihuSourceUrl,
 } from '../atlas-store';
 import lessons from '../lessons.json';
+import cases from '../discussion-cases.json';
 
-const palette = ['#355e7b', '#bd8452', '#7e947b'];
+const palette = ['#9bb9ce', '#c5a383', '#818b96'];
+const argumentFields = [
+  { key: 'claim', title: '提炼观点' },
+  { key: 'evidence', title: '核查依据' },
+  { key: 'counterpoint', title: '提出反问' },
+  { key: 'revision', title: '修订判断' },
+] as const;
 const fields = [
   {
     key: 'problem',
@@ -88,7 +99,9 @@ export default function Review() {
   /* oxlint-enable react/react-compiler */
   const lesson = lessons[selected - 1],
     reflection = m.reflections[selected],
-    quiz = m.quizzes[selected];
+    quiz = m.quizzes[selected],
+    discussion = m.discussions[selected],
+    sample = cases[selected - 1];
   const timeFor = (id: number) =>
     Object.values(m.timeByDay).reduce((sum, row) => sum + (row[id] || 0), 0);
   const totalTime = lessons.reduce((sum, l) => sum + timeFor(l.id), 0);
@@ -102,8 +115,8 @@ export default function Review() {
         (quizzes.filter((q) => q.latest.correct).length / tested) * 100,
       )
     : null;
-  const reflectionCount = Object.values(m.reflections).filter((r) =>
-    fields.some((f) => r[f.key].trim()),
+  const discussionCount = Object.values(m.discussions).filter(
+    (d) => d.completedAt || d.alternate?.completedAt,
   ).length;
   const thinkingFields = fields.filter((f) =>
     reflection?.[f.key]?.trim(),
@@ -135,12 +148,14 @@ export default function Review() {
                   ).toFixed(2),
                 )
               : null,
+            attempts: daily?.attempts ?? null,
             rate: daily
               ? Math.round((daily.correct / daily.attempts) * 100)
               : null,
           };
         });
-  const hasTrend = trend.some((d) => d.minutes !== null || d.rate !== null);
+  const hasMinutes = trend.some((d) => d.minutes !== null);
+  const hasRate = trend.some((d) => d.rate !== null);
   const needsReview = lessons.filter(
     (l) => m.quizzes[l.id] && !m.quizzes[l.id].latest.correct,
   );
@@ -171,6 +186,32 @@ export default function Review() {
         reflection?.[f.key] || '尚未填写',
         '',
       ]),
+      '## 观点练习',
+      ...(discussion
+        ? [
+            discussion.mode === 'sample'
+              ? '材料类型：原创讨论示例 · 非知乎原文'
+              : '材料类型：用户添加的知乎摘录（未自动核验）',
+            `标题：${discussion.mode === 'sample' ? sample.title : discussion.title}`,
+            ...(discussion.mode === 'zhihu'
+              ? [
+                  `原作者：${discussion.author || '未填写'}`,
+                  `原文：${discussion.url}`,
+                ]
+              : []),
+            `摘录：${discussion.mode === 'sample' ? sample.excerpt : discussion.excerpt}`,
+            ...argumentFields.flatMap((f) => [
+              '',
+              `### ${f.title}`,
+              discussion[f.key] || '尚未填写',
+            ]),
+            '',
+            discussion.completedAt
+              ? '状态：已保存观点卡；不代表结论已核实。'
+              : '状态：练习草稿',
+          ]
+        : ['还没有观点练习记录。']),
+      '',
       '## 下次复习时问自己',
       lesson.question,
       '',
@@ -240,13 +281,13 @@ export default function Review() {
             </small>
           </article>
           <article>
-            <NotebookPen size={20} />
-            <span>留下思考的章节</span>
+            <MessageCircle size={20} />
+            <span>完成观点练习</span>
             <strong>
-              {reflectionCount}
+              {discussionCount}
               <i> / 11</i>
             </strong>
-            <small>从自己的问题和证据开始</small>
+            <small>把阅读变成一次有依据的判断</small>
           </article>
         </section>
         <section className="review-chart-grid">
@@ -254,39 +295,49 @@ export default function Review() {
             <div className="review-panel-title">
               <span>01</span>
               <div>
-                <h2>专注投入，落在哪里？</h2>
+                <h2>学习时间，花在哪里？</h2>
                 <p>按学习阶段分配活跃时长</p>
               </div>
             </div>
             {totalTime > 0 ? (
-              <ChartContainer
-                config={{ value: { label: '活跃时长' } }}
-                className="review-pie"
-                aria-label="各学习阶段活跃时长饼图"
-              >
-                <PieChart>
-                  <Pie
-                    data={pieData.filter((d) => d.value > 0)}
-                    dataKey="value"
-                    nameKey="name"
-                    innerRadius={62}
-                    outerRadius={88}
-                    paddingAngle={3}
-                    isAnimationActive={false}
-                  ></Pie>
-                  <ChartTooltip
-                    content={
-                      <ChartTooltipContent
-                        formatter={(v, name) => (
-                          <span>
-                            {name}：{duration(Number(v))}
-                          </span>
-                        )}
-                      />
-                    }
-                  />
-                </PieChart>
-              </ChartContainer>
+              <div className="review-pie-wrap">
+                <ChartContainer
+                  config={{ value: { label: '活跃时长' } }}
+                  className="review-pie"
+                  aria-label="各学习阶段活跃时长饼图"
+                >
+                  <PieChart>
+                    <Pie
+                      data={pieData.filter((d) => d.value > 0)}
+                      dataKey="value"
+                      nameKey="name"
+                      innerRadius={72}
+                      outerRadius={93}
+                      paddingAngle={
+                        pieData.filter((d) => d.value > 0).length > 1 ? 3 : 0
+                      }
+                      stroke="none"
+                      isAnimationActive={false}
+                    ></Pie>
+                    <ChartTooltip
+                      content={
+                        <ChartTooltipContent
+                          className="review-chart-tooltip"
+                          formatter={(v, name) => (
+                            <span>
+                              {name}：{duration(Number(v))}
+                            </span>
+                          )}
+                        />
+                      }
+                    />
+                  </PieChart>
+                </ChartContainer>
+                <div className="review-pie-center">
+                  <strong>{duration(totalTime)}</strong>
+                  <span>累计活跃学习</span>
+                </div>
+              </div>
             ) : (
               <div className="review-chart-empty">
                 <Clock3 size={32} />
@@ -302,7 +353,12 @@ export default function Review() {
                 <li key={d.name}>
                   <span style={{ background: d.fill }} />
                   {d.name}
-                  <strong>{duration(d.value)}</strong>
+                  <strong>{d.value ? duration(d.value) : '未记录'}</strong>
+                  <em>
+                    {totalTime && d.value
+                      ? `${Math.round((d.value / totalTime) * 100)}%`
+                      : '—'}
+                  </em>
                 </li>
               ))}
             </ul>
@@ -312,77 +368,133 @@ export default function Review() {
               <span>02</span>
               <div>
                 <h2>看见最近七天的积累</h2>
-                <p>活跃分钟与练习提交正确率</p>
+                <p>每天的学习投入与练习提交记录</p>
               </div>
             </div>
-            {hasTrend ? (
-              <ChartContainer
-                config={{
-                  minutes: { label: '活跃分钟', color: palette[0] },
-                  rate: { label: '练习正确率', color: palette[1] },
-                }}
-                className="review-trend"
-                aria-label="最近七天的学习时长和练习正确率趋势"
-              >
-                <LineChart
-                  data={trend}
-                  margin={{ top: 15, right: 6, left: 0, bottom: 10 }}
-                  accessibilityLayer
+            <div className="review-metric-chart">
+              <h3>
+                活跃学习时长 <span>分钟 / 天</span>
+              </h3>
+              {hasMinutes ? (
+                <ChartContainer
+                  config={{ minutes: { label: '活跃分钟', color: palette[0] } }}
+                  className="review-trend"
+                  aria-label="最近七天每天的活跃学习分钟柱图"
                 >
-                  <CartesianGrid vertical={false} stroke="#e3e5dd" />
-                  <XAxis dataKey="label" axisLine={false} tickLine={false} />
-                  <YAxis
-                    yAxisId="time"
-                    width={36}
-                    axisLine={false}
-                    tickLine={false}
-                  />
-                  <YAxis
-                    yAxisId="rate"
-                    orientation="right"
-                    domain={[0, 100]}
-                    width={42}
-                    unit="%"
-                    axisLine={false}
-                    tickLine={false}
-                  />
-                  <ChartTooltip content={<ChartTooltipContent />} />
-                  <Line
-                    yAxisId="time"
-                    type="linear"
-                    dataKey="minutes"
-                    stroke={palette[0]}
-                    strokeWidth={2.5}
-                    dot={{ r: 4 }}
-                    connectNulls={false}
-                    isAnimationActive={false}
-                  />
-                  <Line
-                    yAxisId="rate"
-                    type="linear"
-                    dataKey="rate"
-                    stroke={palette[1]}
-                    strokeWidth={2}
-                    strokeDasharray="4 4"
-                    dot={{ r: 4 }}
-                    connectNulls={false}
-                    isAnimationActive={false}
-                  />
-                </LineChart>
-              </ChartContainer>
-            ) : (
-              <div className="review-chart-empty wide">
-                <Target size={32} />
-                <p>
-                  还没有学习趋势。
+                  <BarChart
+                    data={trend}
+                    margin={{ top: 8, right: 12, left: 0, bottom: 0 }}
+                    accessibilityLayer
+                  >
+                    <CartesianGrid vertical={false} stroke="#ffffff0d" />
+                    <XAxis
+                      dataKey="label"
+                      axisLine={false}
+                      tickLine={false}
+                      tickMargin={9}
+                    />
+                    <YAxis
+                      width={43}
+                      domain={[0, 'auto']}
+                      tickCount={3}
+                      axisLine={false}
+                      tickLine={false}
+                    />
+                    <ChartTooltip
+                      cursor={{ fill: '#ffffff05' }}
+                      content={
+                        <ChartTooltipContent
+                          className="review-chart-tooltip"
+                          formatter={(v) => (
+                            <span>{Number(v).toFixed(2)} 分钟</span>
+                          )}
+                        />
+                      }
+                    />
+                    <Bar
+                      dataKey="minutes"
+                      fill={palette[0]}
+                      radius={[4, 4, 0, 0]}
+                      maxBarSize={24}
+                      minPointSize={2}
+                      isAnimationActive={false}
+                    />
+                  </BarChart>
+                </ChartContainer>
+              ) : (
+                <div className="review-metric-empty">
+                  还没有活跃时长
                   <br />
-                  读一页、做一次练习，记录就会出现在这里。
-                </p>
-              </div>
-            )}
-            <div className="review-trend-key">
-              <span>● 活跃分钟（左轴）</span>
-              <span>● 正确率（右轴）</span>
+                  回到课程读一页，记录从这里开始。
+                </div>
+              )}
+            </div>
+            <div className="review-metric-chart">
+              <h3>
+                练习提交正确率 <span>正确次数 / 当日提交次数</span>
+              </h3>
+              {hasRate ? (
+                <ChartContainer
+                  config={{ rate: { label: '练习正确率', color: palette[1] } }}
+                  className="review-trend"
+                  aria-label="最近七天每天的练习提交正确率折线图"
+                >
+                  <LineChart
+                    data={trend}
+                    margin={{ top: 8, right: 12, left: 0, bottom: 0 }}
+                    accessibilityLayer
+                  >
+                    <CartesianGrid vertical={false} stroke="#ffffff0d" />
+                    <XAxis
+                      dataKey="label"
+                      axisLine={false}
+                      tickLine={false}
+                      tickMargin={9}
+                      padding={{ left: 12, right: 12 }}
+                    />
+                    <YAxis
+                      domain={[0, 100]}
+                      ticks={[0, 50, 100]}
+                      width={43}
+                      unit="%"
+                      axisLine={false}
+                      tickLine={false}
+                    />
+                    <ChartTooltip
+                      content={
+                        <ChartTooltipContent
+                          className="review-chart-tooltip"
+                          formatter={(v, _name, item) => (
+                            <span>
+                              {Number(v)}% · 当日 {item.payload.attempts} 次提交
+                            </span>
+                          )}
+                        />
+                      }
+                    />
+                    <Line
+                      type="linear"
+                      dataKey="rate"
+                      stroke={palette[1]}
+                      strokeWidth={2}
+                      dot={{
+                        r: 4,
+                        fill: palette[1],
+                        stroke: '#111416',
+                        strokeWidth: 2,
+                      }}
+                      connectNulls={false}
+                      isAnimationActive={false}
+                    />
+                  </LineChart>
+                </ChartContainer>
+              ) : (
+                <div className="review-metric-empty">
+                  还没有提交记录
+                  <br />
+                  完成一次课程判断题后，这里会出现数据。
+                </div>
+              )}
             </div>
             <p className="review-caption">
               没有记录的日期留空；只有一个数据点时，不推断上升或下降。
@@ -393,15 +505,15 @@ export default function Review() {
           <summary>这些数据怎样计算？</summary>
           <p>
             时长仅统计课程页处于前台、有焦点，且最近 2
-            分钟内有操作的时间；后台、长时间闲置与设备休眠不补记。它反映浏览投入，不能测量心理专注力。首次正确率保留每课第一次提交，最新正确率反映各课最近一次提交；折线图按当天所有提交计算。旧完成记录不补造分数或时长。全部数据仅保存在这台设备。
+            分钟内有操作的时间；后台、长时间闲置与设备休眠不补记。它反映浏览投入，不能测量心理专注力。首次正确率保留每课第一次提交，最新正确率反映各课最近一次提交；正确率折线按当天课程判断题的提交计算，观点练习不计入正确率。旧完成记录不补造分数或时长。全部数据仅保存在这台设备。
           </p>
         </details>
         <section className="review-workspace">
           <div className="review-workspace-heading">
             <div>
               <p className="review-kicker">FROM KNOWLEDGE TO ACTION</p>
-              <h2>把一个问题，拆成自己的思路。</h2>
-              <p>写下依据和下一步，让知识留下可以再次使用的形状。</p>
+              <h2>从一段观点，走到自己的判断。</h2>
+              <p>保留来源、依据和反问，看见一次思考是怎样发生的。</p>
             </div>
             <Select
               items={lessons.map((l) => ({
@@ -426,39 +538,132 @@ export default function Review() {
               </SelectContent>
             </Select>
           </div>
-          <div className="review-thinking-progress">
-            <span>思考记录 · 已填写 {thinkingFields} / 4 步</span>
-            <Progress
-              value={thinkingFields * 25}
-              aria-label="思考记录填写进度"
-            />
-            <small>记录完成度，不是思考能力评分</small>
-          </div>
-          <div className="review-mindmap">
-            {fields.map((f, i) => (
-              <article className="review-thought" key={`${selected}-${f.key}`}>
-                <div>
-                  <span>{number(i + 1)}</span>
-                  <h3>{f.title}</h3>
-                  {i < 3 && <ChevronRight size={16} />}
+          <section
+            className="review-discussion"
+            id="discussion-review"
+            aria-label="观点练习复盘"
+          >
+            {discussion ? (
+              <>
+                <div className="review-discussion-source">
+                  <Quote size={23} />
+                  <div>
+                    <span className="discussion-provenance">
+                      {discussion.mode === 'sample'
+                        ? '原创讨论示例 · 非知乎原文'
+                        : '我的知乎材料 · 摘录未自动核验'}
+                    </span>
+                    <h3>
+                      {discussion.mode === 'sample'
+                        ? sample.title
+                        : discussion.title || '尚未填写原文标题'}
+                    </h3>
+                    <p>
+                      {discussion.mode === 'zhihu' && discussion.author
+                        ? `原作者：${discussion.author} · `
+                        : ''}
+                      {discussion.completedAt ? '观点卡已保存' : '练习草稿'}
+                    </p>
+                    {discussion.mode === 'zhihu' &&
+                      zhihuSourceUrl(discussion.url) && (
+                        <a
+                          href={zhihuSourceUrl(discussion.url)!}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          回到知乎原文 <ArrowUpRight size={13} />
+                        </a>
+                      )}
+                    <details className="review-source-excerpt">
+                      <summary>查看讨论摘录</summary>
+                      <p>
+                        {discussion.mode === 'sample'
+                          ? sample.excerpt
+                          : discussion.excerpt || '还没有添加摘录。'}
+                      </p>
+                    </details>
+                  </div>
                 </div>
-                <label htmlFor={`reflection-${f.key}`}>{f.hint}</label>
-                <textarea
-                  id={`reflection-${f.key}`}
-                  value={reflection?.[f.key] || ''}
-                  maxLength={1500}
-                  onChange={(e) =>
-                    saveReflection(
-                      selected,
-                      f.key as keyof Omit<Reflection, 'updatedAt'>,
-                      e.target.value,
-                    )
-                  }
-                  placeholder="用自己的话写下来……"
-                />
-              </article>
-            ))}
-          </div>
+                <div className="review-argument-map">
+                  {argumentFields.map((f, i) => (
+                    <article className="review-argument-node" key={f.key}>
+                      <h4>
+                        {number(i + 1)} · {f.title}
+                        {i < 3 && <ChevronRight size={15} />}
+                      </h4>
+                      <p>{discussion[f.key] || '这一格还在等你的想法。'}</p>
+                    </article>
+                  ))}
+                </div>
+                <div className="review-discussion-actions">
+                  <span>
+                    {
+                      argumentFields.filter((f) => discussion[f.key].trim())
+                        .length
+                    }{' '}
+                    / 4 步有记录 · 结论仍需依据核验
+                  </span>
+                  <Link href={`/learn/${selected}?tab=discussion`}>
+                    继续这次观点练习 <ArrowRight size={15} />
+                  </Link>
+                </div>
+              </>
+            ) : (
+              <div className="review-discussion-empty">
+                <div>
+                  <h3>让一次阅读，留下自己的判断。</h3>
+                  <p>
+                    做一道情境题，或带入一段知乎摘录。这里会连起你的观点、依据、反问和修订。
+                  </p>
+                </div>
+                <Link
+                  className="review-primary"
+                  href={`/learn/${selected}?tab=discussion`}
+                >
+                  开始观点练习 <ArrowRight size={16} />
+                </Link>
+              </div>
+            )}
+          </section>
+          <details className="review-personal-work">
+            <summary>继续拆解一个自己的任务</summary>
+            <div className="review-thinking-progress">
+              <span>思考记录 · 已填写 {thinkingFields} / 4 步</span>
+              <Progress
+                value={thinkingFields * 25}
+                aria-label="思考记录填写进度"
+              />
+              <small>记录完成度，不是思考能力评分</small>
+            </div>
+            <div className="review-mindmap">
+              {fields.map((f, i) => (
+                <article
+                  className="review-thought"
+                  key={`${selected}-${f.key}`}
+                >
+                  <div>
+                    <span>{number(i + 1)}</span>
+                    <h3>{f.title}</h3>
+                    {i < 3 && <ChevronRight size={16} />}
+                  </div>
+                  <label htmlFor={`reflection-${f.key}`}>{f.hint}</label>
+                  <textarea
+                    id={`reflection-${f.key}`}
+                    value={reflection?.[f.key] || ''}
+                    maxLength={1500}
+                    onChange={(e) =>
+                      saveReflection(
+                        selected,
+                        f.key as keyof Omit<Reflection, 'updatedAt'>,
+                        e.target.value,
+                      )
+                    }
+                    placeholder="用自己的话写下来……"
+                  />
+                </article>
+              ))}
+            </div>
+          </details>
           <div className="review-save-line">
             <span>
               {progress.available
