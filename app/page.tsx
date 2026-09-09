@@ -117,8 +117,8 @@ export default function Home() {
       <section className="folio-copy">
         <p className="folio-eyebrow">AI 学习图鉴 · 从会问，到会用</p>
         <h1 className="glass-heading">
-          <span>会用 AI，</span>
-          <span>更会判断。</span>
+          <span>会用 AI</span>
+          <span>更会判断</span>
         </h1>
         <p className="folio-hook">
           有的人用ai只能问出10块钱的答案，而有的人能问出几千甚至几万的答案。
