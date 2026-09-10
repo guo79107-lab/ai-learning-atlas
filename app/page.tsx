@@ -122,6 +122,7 @@ export default function Home() {
             width={1672}
             height={941}
             priority
+            unoptimized
             fetchPriority="high"
           />
         </Link>
