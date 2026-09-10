@@ -2,6 +2,8 @@
 import { useSyncExternalStore } from 'react';
 
 export type CoachFeedback = {
+  steps?: { title: string; detail: string }[];
+  explanation?: string;
   observation: string;
   quote: string;
   gap: string;
@@ -17,6 +19,8 @@ export type CoachFeedback = {
   card: { front: string; back: string };
 };
 export type CoachDraft = {
+  intent: 'question' | 'judgment';
+  sourceUrl: string;
   mode: 'sample' | 'zhihu';
   title: string;
   author: string;
@@ -44,6 +48,8 @@ type CoachState = {
   available: boolean;
 };
 export const emptyCoachDraft = (): CoachDraft => ({
+  intent: 'question',
+  sourceUrl: '',
   mode: 'sample',
   title: '',
   author: '',
@@ -66,6 +72,8 @@ const validChapter = (n: unknown): n is number =>
 export function cleanDraft(raw: unknown): CoachDraft {
   const d = raw && typeof raw === 'object' ? (raw as Partial<CoachDraft>) : {};
   return {
+    intent: d.intent === 'question' ? 'question' : 'judgment',
+    sourceUrl: text(d.sourceUrl, 500),
     mode: d.mode === 'zhihu' ? 'zhihu' : 'sample',
     title: text(d.title, 200),
     author: text(d.author, 100),
@@ -79,6 +87,23 @@ export function isFeedback(f: unknown, answer: string): f is CoachFeedback {
   if (!f || typeof f !== 'object') return false;
   const v = f as CoachFeedback;
   return (
+    (v.steps === undefined ||
+      (Array.isArray(v.steps) &&
+        v.steps.length === 3 &&
+        v.steps.every(
+          (s) =>
+            s &&
+            typeof s.title === 'string' &&
+            s.title.length > 0 &&
+            s.title.length <= 40 &&
+            typeof s.detail === 'string' &&
+            s.detail.length > 0 &&
+            s.detail.length <= 350,
+        ))) &&
+    (v.explanation === undefined ||
+      (typeof v.explanation === 'string' &&
+        v.explanation.length > 0 &&
+        v.explanation.length <= 1200)) &&
     ['observation', 'quote', 'gap', 'reason', 'question'].every(
       (k) =>
         typeof v[k as keyof CoachFeedback] === 'string' &&

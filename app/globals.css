@@ -3707,3 +3707,175 @@ svg {
   .coach-review-heading > div { flex-basis: 100%; }
   .coach-return-plan > div { min-width: 220px; }
 }
+
+/* Reading room and independent coach share the planet's restrained glass. */
+.learn-page {
+  background: radial-gradient(ellipse at 95% 25%, #26333e55 0, transparent 54%), radial-gradient(ellipse at 0 90%, #46504b20 0, transparent 55%), #080c10;
+  padding-bottom: 110px;
+}
+.learning-book.liquid-glass {
+  grid-template-columns: minmax(250px, .63fr) minmax(0, 1.37fr);
+  background: linear-gradient(130deg, #bdcdd710, #ffffff02 50%, #a1b3bf07);
+  backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+  border: 0; border-radius: 28px; box-shadow: inset 0 1px 1px #ffffff20, 0 24px 80px #0003;
+  overflow: hidden;
+}
+.learning-book .book-art { background: none; border: 0; padding: 36px 26px; gap: 20px; }
+.learning-book .book-art img { border-radius: 18px; box-shadow: 0 20px 50px #0005; }
+.learning-book .book-page { background: transparent; padding: 36px 38px 26px; }
+.learning-book .lesson-intro { font-size: 15px; line-height: 1.95; color: #b8c4ce; }
+.learning-book .book-page h1 { font-size: clamp(26px, 2.4vw, 36px); font-weight: 550; line-height: 1.5; }
+.page-tabs.lesson-step-tabs { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 10px; border: 0; margin: 28px 0; }
+.page-tabs.lesson-step-tabs button { display: flex; gap: 10px; align-items: center; text-align: left; padding: 15px 12px; border: 1px solid #ffffff24; border-radius: 15px; margin: 0; white-space: normal; min-width: 0; color: #aab9c7; cursor: pointer; background: #ffffff02; }
+.page-tabs.lesson-step-tabs button[aria-pressed='true'] { background: #cfdeec12; border-color: #bfd6e27d; color: #f0f5f8; box-shadow: inset 0 1px #ffffff30; }
+.lesson-step-number { font-size: 13px; font-variant-numeric: tabular-nums; opacity: .65; }
+.lesson-step-tabs strong { font-size: 14px; font-weight: 550; display: block; }
+.lesson-step-tabs small { display: block; font-size: 12px; margin-top: 6px; color: #93a5b3; line-height: 1.5; }
+.lesson-step-dot { width: 5px; height: 5px; border-radius: 50%; background: #dde9f1; margin-left: auto; flex-shrink: 0; }
+.lesson-coach-entry { margin: 28px 0 18px; padding: 18px 20px; border-radius: 17px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.lesson-coach-entry strong { font-weight: 500; font-size: 14px; }
+.lesson-coach-entry small { display: block; color: #a9bac7; font-size: 12px; margin-top: 8px; }
+.coach-avatar { display: block; width: 80px; height: 80px; border-radius: 50%; object-fit: cover; flex-shrink: 0; }
+.coach-launcher { position: fixed; right: 26px; bottom: 20px; z-index: 35; }
+.coach-launch-link { display: flex; align-items: center; gap: 8px; padding: 7px 19px 7px 7px; border-radius: 100px; background: #111920ad; backdrop-filter: blur(20px); box-shadow: 0 10px 35px #0005; color: #f3f5f7; }
+.coach-launch-link .coach-avatar { width: 48px; height: 48px; }
+.coach-launch-link strong { display: block; font-size: 14px; font-weight: 550; }
+.coach-launch-link small { display: block; font-size: 11px; color: #b6c5cf; margin-top: 4px; }
+.coach-motion-toggle { display: block; margin: 5px 13px 0 auto; color: #bec8d0; background: #131a2070; border-radius: 20px; padding: 3px 8px; font-size: 10px; cursor: pointer; }
+.coach-workspace { padding: 0 4% 80px; }
+.coach-workspace-grid { max-width: 1260px; display: grid; grid-template-columns: 275px minmax(0,1fr); gap: 46px; margin: 45px auto; align-items: start; }
+.coach-sidebar { position: sticky; top: 26px; }
+.coach-identity { display: flex; align-items: center; gap: 14px; }
+.coach-identity > div > span { color: #aab9c6; font-size: 12px; }
+.coach-identity h1 { margin: 7px 0 0; font-size: 29px; letter-spacing: -.04em; font-weight: 550; }
+.coach-identity > button { background: none; padding: 6px; color: #889ba9; cursor: pointer; align-self: flex-start; margin-left: auto; }
+.coach-sidebar-intro { font-size: 14px; color: #aabac6; line-height: 1.85; margin: 20px 0 15px; }
+.coach-model-label { display: flex; align-items: center; gap: 9px; color: #bdcdda; font-size: 12px; padding-bottom: 28px; border-bottom: 1px solid #ffffff15; }
+.coach-model-label > span { width: 5px; height: 5px; background: #bacdd9; border-radius: 50%; }
+.coach-chapter-label { display: flex; align-items: center; gap: 9px; color: #b4c3cf; font-size: 13px; margin: 26px 0 13px; }
+.coach-sidebar select { width: 100%; background: #ffffff05; border: 1px solid #ffffff25; color: #eef3f7; border-radius: 12px; padding: 12px; font: inherit; font-size: 14px; }
+.coach-sidebar option { background: #141c23; }
+.coach-course-link { display: flex; gap: 8px; align-items: center; color: #93abba; font-size: 12px; margin-top: 13px; }
+.coach-process { margin-top: 35px; padding-top: 25px; border-top: 1px solid #ffffff15; }
+.coach-process > span { font-size: 12px; color: #8da2b2; }
+.coach-process ol { list-style: none; padding: 0; margin: 20px 0; }
+.coach-process li { display: flex; align-items: flex-start; gap: 12px; margin: 0 0 24px; }
+.coach-process b { display: grid; place-items: center; width: 23px; height: 23px; border: 1px solid #aabbc840; border-radius: 50%; font-size: 11px; font-weight: 400; color: #bacbd7; }
+.coach-process strong { font-size: 14px; font-weight: 500; color: #d9e2e9; }
+.coach-process small { display: block; margin-top: 7px; color: #90a4b4; font-size: 12px; }
+.coach-learning-record { display: flex; gap: 12px; align-items: center; padding-top: 25px; border-top: 1px solid #ffffff15; font-size: 12px; color: #b6c8d5; }
+.coach-learning-record small { display: block; margin-top: 6px; font-size: 11px; color: #7f99ac; }
+.coach-work-surface.liquid-glass { border-radius: 26px; padding: 40px; background: linear-gradient(140deg,#c9d5e20b,#ffffff03); backdrop-filter: blur(24px); }
+.coach-work-surface .ai-coach { padding-top: 0; }
+.coach-work-surface .coach-intro h2 { font-size: clamp(26px, 3vw, 36px); font-weight: 550; letter-spacing: -.04em; margin: 18px 0 12px; }
+.coach-work-surface .coach-intro p { font-size: 15px; }
+.coach-intent-tabs { display: flex; width: fit-content; gap: 6px; padding: 5px; margin: 27px 0 24px; border-radius: 100px; background: #0002; border: 1px solid #ffffff18; }
+.coach-intent-tabs button { border-radius: 100px; padding: 11px 22px; color: #9fb1c1; font-size: 14px; background: none; cursor: pointer; }
+.coach-intent-tabs button[aria-pressed='true'] { background: #d1dee416; color: #f2f7fa; box-shadow: inset 0 1px #ffffff25; }
+.coach-field { margin-bottom: 20px; }
+.coach-field > span { font-size: 14px; }
+.coach-field input, .coach-field textarea { font-size: 16px; background: #060c101f; padding: 14px 16px; border-color: #bacddd30; }
+.coach-field > span small { font-size: 12px; }
+.coach-material-tabs button { font-size: 13px; padding: 9px 18px; }
+.coach-material p { font-size: 15px; }
+.coach-fine { font-size: 12px; line-height: 1.9; }
+.coach-source-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.zhihu-import-heading { display: flex; align-items: flex-start; gap: 14px; margin: 20px 0; }
+.zhihu-wordmark { display: grid; place-items: center; flex-shrink: 0; width: 36px; height: 36px; font-size: 20px; border-radius: 10px; background: #95b9d311; color: #c2d9e9; }
+.zhihu-import-heading h3 { font-size: 16px; font-weight: 500; margin: 0 0 8px; }
+.zhihu-import-heading p { font-size: 13px; color: #95abba; line-height: 1.8; margin: 0; }
+.zhihu-search { display: flex; gap: 8px; }
+.zhihu-search button { color: #d1e3f0; background: #b5c8d617; border-radius: 12px; padding: 15px; cursor: pointer; }
+.zhihu-results { display: grid; gap: 10px; }
+.zhihu-results button { text-align: left; color: #d0deea; border: 1px solid #ffffff25; padding: 16px; border-radius: 13px; background: #ffffff04; cursor: pointer; }
+.zhihu-results strong, .zhihu-results small { display: block; }
+.zhihu-results small, .zhihu-results p { font-size: 12px; color: #9ab0c1; line-height: 1.8; }
+.zhihu-results span { font-size: 12px; display: flex; align-items: center; gap: 8px; }
+.coach-input-error { color: #ddbd96; }
+.coach-sent-question { margin: 25px 0; }
+.coach-sent-question > span { color: #a7bdce; font-size: 12px; }
+.coach-sent-question p { font-size: 15px; color: #dbe5ee; line-height: 1.9; white-space: pre-wrap; overflow-wrap: anywhere; }
+.coach-work-surface .coach-feedback { padding: 0; border: 0; border-radius: 0; background: none; }
+.coach-section-label { display: flex; align-items: center; justify-content: space-between; gap: 12px; color: #b9cbd9; font-size: 13px; }
+.coach-section-label > span { font-size: 12px; letter-spacing: 2px; color: #93aabd; }
+.coach-explanation-plan ol { padding: 0; list-style: none; margin: 22px 0 30px; }
+.coach-explanation-plan li { display: flex; align-items: flex-start; gap: 17px; position: relative; padding-bottom: 24px; }
+.coach-explanation-plan li:not(:last-child)::after { content: ''; position: absolute; width: 1px; background: #bdcddd25; left: 16px; top: 36px; bottom: 5px; }
+.coach-explanation-plan b { display: grid; place-items: center; flex-shrink: 0; width: 33px; height: 33px; border: 1px solid #bfd1df48; border-radius: 50%; color: #dbe7ee; font-size: 13px; font-weight: 400; }
+.coach-explanation-plan h3 { margin: 4px 0 7px; font-size: 16px; font-weight: 550; color: #e1eaf1; }
+.coach-explanation-plan p { margin: 0; font-size: 15px; line-height: 1.9; }
+.coach-plain-answer { background: #c5d9e10a; border-left: 2px solid #adc5d686; border-radius: 0 16px 16px 0; padding: 22px 24px; }
+.coach-plain-answer p { white-space: pre-wrap; font-size: 16px; line-height: 2; color: #d5e0e9; }
+.coach-feedback-details { margin: 24px 0; border-top: 1px solid #ffffff1c; padding-top: 19px; }
+.coach-feedback-details > summary { cursor: pointer; color: #a9becd; font-size: 13px; margin-bottom: 18px; }
+.coach-share-trigger { width: fit-content; padding: 13px 22px; }
+.coach-share-dialog { display: block; color-scheme: dark; width: min(740px,calc(100vw - 30px)); max-width: 740px; max-height: 90svh; overflow-y: auto; border: 1px solid #ffffff35; border-radius: 24px; background: #121b23; color: #e8eff4; padding: 30px; box-shadow: 0 35px 120px #0009; }
+.coach-share-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; }
+.coach-share-heading span { color: #a6bccd; font-size: 12px; }
+.coach-share-heading h2 { font-size: 25px; font-weight: 500; margin: 14px 0; }
+.coach-share-heading button { background: transparent; color: #c0ccd4; cursor: pointer; }
+.coach-share-dialog p, .coach-share-dialog [data-slot='dialog-description'] { font-size: 14px; color: #acbfce; line-height: 1.9; margin: 14px 0; }
+.coach-share-dialog label { display: block; margin: 18px 0 10px; font-size: 13px; }
+.coach-share-dialog textarea { width: 100%; min-height: 310px; max-height: 50svh; border-radius: 14px; background: #080e1455; color: #d6e2eb; border: 1px solid #a2bdcf38; padding: 17px; font: inherit; font-size: 14px; line-height: 1.9; resize: vertical; }
+.coach-share-actions { display: flex; gap: 18px; align-items: center; flex-wrap: wrap; }
+.coach-share-actions .coach-text-button { display: flex; align-items: center; gap: 6px; }
+.coach-share-dialog > small { display: block; color: #8da8bb; margin-top: 16px; font-size: 12px; line-height: 1.8; }
+.coach-share-status { color: #c5dbeb; }
+.book-lawn-background { position: absolute; inset: 0; z-index: 0; overflow: hidden; background-size: cover; background-position: 60% 50%; }
+.book-lawn-background img { width: 100%; height: 100%; object-fit: cover; object-position: 60% 50%; }
+.book-lawn-background::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg,#08130ddd 0%,#09180a7a 38%,#07170712 72%),linear-gradient(180deg,#0611096b 0%,transparent 35%,#07110944 100%); }
+.folio-home--background .folio-copy { width: min(48%,680px); margin-left: max(5%,calc((100% - 1450px)/2)); padding: 50px 0 80px; text-align: left; }
+.folio-home--background .folio-copy h1.glass-heading { text-align: left; font-size: clamp(52px,5.2vw,88px); line-height: 1.2; }
+.folio-home--background .folio-copy h1.glass-heading > span { margin-left: 0; }
+.folio-home--background .folio-copy .folio-eyebrow { margin-left: 0; }
+.folio-home--background .folio-hook { max-width: 500px; font-size: 15px; margin: 28px 0 10px; line-height: 1.9; }
+.folio-home--background .folio-tension { max-width: 500px; font-size: 14px; color: #d9e1d3; margin: 0 0 25px; line-height: 1.9; }
+.folio-home--background .folio-entry, .folio-home--background .folio-books-toggle { margin-left: 0; }
+.folio-home--background .folio-description { text-align: left; margin-left: 0; color: #c4d2c1; }
+@media(max-width:1100px) { .coach-workspace-grid { grid-template-columns:230px minmax(0,1fr); gap:25px; }.coach-work-surface.liquid-glass { padding:28px; }.learning-book .book-page { padding:28px; }.page-tabs.lesson-step-tabs button { padding:14px 9px; gap:7px; }.lesson-step-tabs small { display:none; } }
+@media(max-width:800px) { .coach-workspace-grid { grid-template-columns:1fr; margin-top:25px; gap:25px; }.coach-sidebar { position:static; display:grid; grid-template-columns:1fr 1fr; column-gap:20px; }.coach-identity { grid-column:1/-1; }.coach-sidebar-intro,.coach-model-label { margin-bottom:0; padding-bottom:15px; }.coach-chapter-label,.coach-sidebar select,.coach-course-link { grid-column:1/-1; }.coach-process,.coach-learning-record { display:none; }.learning-book.liquid-glass { grid-template-columns:minmax(200px,.7fr) minmax(0,1.3fr); }.learning-book .book-art { padding:25px 18px; }.learning-book .book-page { padding:25px 20px; }.page-tabs.lesson-step-tabs { gap:6px; }.lesson-step-number { display:none; }.lesson-step-dot { display:none; } }
+@media(max-width:620px) {
+ .learn-header { gap:14px; height:76px; }.learn-header .brand { font-size:16px; letter-spacing:0; }.learn-header .back-link,.learn-header .review-entry { font-size:12px; gap:5px; }.learning-book.liquid-glass { display:block; border-radius:22px; }.learning-book .book-art { display:none; }.learning-book .book-page { padding:26px 20px; }.learning-book .book-page h1 { font-size:27px; }.lesson-breadcrumb { margin:22px auto 20px; }.page-tabs.lesson-step-tabs button { justify-content:center; padding:14px 8px; }.lesson-step-tabs strong { font-size:13px; }.page-tabs.lesson-step-tabs { gap:8px; }.lesson-coach-entry small { line-height:1.7; }.coach-workspace { padding:0 5% 70px; }.coach-work-surface.liquid-glass { padding:26px 20px; border-radius:22px; }.coach-workspace .coach-intro h2 { font-size:28px; }.coach-source-meta { grid-template-columns:1fr; gap:0; }.coach-intent-tabs button { padding:10px 18px; }.coach-feedback-heading > span { display:none; }.coach-plain-answer { padding:20px 18px; }.coach-launcher { right:14px; bottom:12px; }.coach-launch-link { padding:5px 13px 5px 5px; }.coach-launch-link small { display:none; }.coach-launch-link .coach-avatar { width:42px; height:42px; }.coach-motion-toggle { font-size:10px; }.coach-share-dialog { padding:24px 20px; }.coach-share-actions { gap:14px; }
+ .folio-home--background .folio-copy { width:90%; margin:0 5%; padding:45px 0 250px; }.folio-home--background .folio-copy h1.glass-heading { font-size:clamp(49px,11vw,64px); }.folio-home--background .folio-hook { max-width:350px; font-size:14px; }.folio-home--background .folio-tension { max-width:320px; font-size:13px; }.folio-home--background .folio-description { font-size:12px; }.book-lawn-background { background-position:67% 50%; }.book-lawn-background::after { background:linear-gradient(180deg,#061009b8 0%,#0610099e 38%,#06100922 80%,#06100966 100%); }
+}
+.lesson-poster-mobile { display: none; }
+@media(max-width:620px) { .lesson-poster-mobile { display: inline-flex; align-items: center; gap: 7px; font-size: 12px; color: #aec5d5; } }
+
+/* The homepage is a complete editorial poster; controls sit outside its artwork. */
+.folio-home--collage { min-height: 100svh; height: auto; background: #090909; padding-bottom: 82px; }
+.folio-home--collage::before { display: none; }
+.folio-home--collage .folio-nav { max-width: 1512px; padding: 22px 30px; }
+.folio-home--collage .folio-brand { font-size: 20px; }
+.folio-home--collage .folio-nav-cta { background: transparent; border: 1px solid #ffffff38; color: #eeeae2 !important; }
+.collage-hero { width: min(100%, calc((100svh - 235px) * 16 / 9 + 48px)); max-width: 1512px; margin: 0 auto; padding: 0 24px; }
+.collage-poster { display: block; width: 100%; aspect-ratio: 16 / 9; overflow: hidden; }
+.collage-poster img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.collage-poster:focus-visible { outline: 2px solid #f1eadb; outline-offset: 5px; }
+.collage-entry-row { display: flex; align-items: center; justify-content: space-between; gap: 32px; padding: 27px 7px 12px; }
+.collage-actions { display: flex; align-items: center; gap: 15px; flex-shrink: 0; }
+.folio-home--collage .folio-entry, .folio-home--collage .folio-books-toggle { background: transparent; border: 0; color: #ece7dd; margin: 0; white-space: nowrap; }
+.folio-home--collage .folio-entry { font-size: 14px; padding-left: 21px; gap: 24px; }
+.folio-home--collage .folio-entry > span { background: transparent; color: #eee8db; border: 1px solid #ffffff30; }
+.folio-home--collage .folio-books-toggle { padding: 16px 19px; font-size: 13px; }
+.collage-caption { max-width: 475px; color: #d8d2c7; font-size: 14px; line-height: 1.85; margin: 0; }
+.collage-caption span { display: block; color: #908d88; font-size: 12px; margin-top: 5px; }
+.folio-home--collage #homepage-learning-books:not([hidden]) { position: relative; height: 480px; overflow: hidden; margin-top: 35px; }
+.folio-home--collage .folio-marquee { top: 50%; }
+.folio-home--collage .folio-footer { position: relative; max-width: 1464px; margin: 15px auto 0; padding: 0 30px; left: auto; right: auto; bottom: auto; color: #97918a; }
+@media(max-width:1100px) { .collage-entry-row { flex-wrap: wrap; gap: 19px; }.collage-caption { max-width: 700px; } }
+@media(max-width:620px) {
+ .folio-home--collage { padding-bottom: 90px; min-height: 100svh; }
+ .folio-home--collage .folio-nav { padding: 20px; gap: 12px; }
+ .folio-home--collage .folio-brand { font-size: 17px; gap: 8px; }
+ .folio-home--collage .folio-brand svg { width: 20px; }
+ .folio-home--collage .folio-nav-cta { font-size: 12px; padding: 10px 13px; }
+ .collage-hero { width: 100%; padding: 0; }
+ .collage-entry-row { padding: 25px 22px 10px; gap: 25px; }
+ .collage-actions { flex-direction: column; align-items: stretch; width: 100%; gap: 12px; }
+ .folio-home--collage .folio-entry { width: 100%; max-width: none; font-size: 15px; }
+ .folio-home--collage .folio-books-toggle { justify-content: center; font-size: 14px; }
+ .collage-caption { font-size: 14px; }
+ .collage-caption span { font-size: 12px; margin-top: 12px; }
+ .folio-home--collage .folio-footer { padding: 0 22px; font-size: 12px; }
+ .folio-home--collage #homepage-learning-books:not([hidden]) { height: 360px; }
+}

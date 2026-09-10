@@ -11,6 +11,9 @@ import Link from './site-link';
 import { sitePath } from './site-config';
 import lessons from './lessons.json';
 import cases from './discussion-cases.json';
+import CoachShare from './coach-share';
+import ZhihuImport from './zhihu-import';
+import { zhihuUrl } from './coach-utils';
 import {
   useCoach,
   saveCoachGoal,
@@ -34,30 +37,57 @@ const statusNames = {
 export function FeedbackView({ feedback: f }: { feedback: CoachFeedback }) {
   return (
     <div className="coach-feedback">
-      <div className="coach-feedback-heading">
-        <Sparkles size={17} />
-        <strong>从你的这句话开始</strong>
-        <span>AI 反馈</span>
-      </div>
-      <blockquote>“{f.quote}”</blockquote>
-      <p>{f.observation}</p>
-      <div className="coach-gap">
-        <span>这次先补好一点</span>
-        <p>{f.gap}</p>
-      </div>
-      <div className="coach-checks">
-        {f.checks.map((c) => (
-          <details key={c.criterion}>
-            <summary>
-              <span>{criteriaNames[c.criterion]}</span>
-              <span className={`coach-status ${c.status}`}>
-                {statusNames[c.status]}
-              </span>
-            </summary>
-            <p>{c.note}</p>
-          </details>
-        ))}
-      </div>
+      {f.steps && (
+        <section className="coach-explanation-plan" aria-label="三步理解">
+          <div className="coach-section-label">
+            先看解题方法 <span>1 → 2 → 3</span>
+          </div>
+          <ol>
+            {f.steps.map((step, index) => (
+              <li key={index}>
+                <b>{index + 1}</b>
+                <div>
+                  <h3>{step.title}</h3>
+                  <p>{step.detail}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </section>
+      )}
+      {f.explanation && (
+        <section className="coach-plain-answer">
+          <span className="coach-section-label">用容易理解的话说</span>
+          <p>{f.explanation}</p>
+        </section>
+      )}
+      <details className="coach-feedback-details">
+        <summary>再看这次表达，可以怎样进步</summary>
+        <div className="coach-feedback-heading">
+          <Sparkles size={17} />
+          <strong>从你的这句话开始</strong>
+          <span>AI 反馈</span>
+        </div>
+        <blockquote>“{f.quote}”</blockquote>
+        <p>{f.observation}</p>
+        <div className="coach-gap">
+          <span>这次先补好一点</span>
+          <p>{f.gap}</p>
+        </div>
+        <div className="coach-checks">
+          {f.checks.map((c) => (
+            <details key={c.criterion}>
+              <summary>
+                <span>{criteriaNames[c.criterion]}</span>
+                <span className={`coach-status ${c.status}`}>
+                  {statusNames[c.status]}
+                </span>
+              </summary>
+              <p>{c.note}</p>
+            </details>
+          ))}
+        </div>
+      </details>
       <p className="coach-fine">
         只评价这次表达；材料中的事实尚未独立核实，AI 也可能判断有误。
       </p>
@@ -78,9 +108,11 @@ export default function AICoach({ id }: { id: number }) {
     draft.question ||
     '你会采纳这段观点吗？说说你的判断、依据，以及它在什么条件下才成立。';
   const valid =
-    draft.answer.trim().length >= 20 &&
+    draft.answer.trim().length >= (draft.intent === 'question' ? 10 : 20) &&
     (draft.mode === 'sample' ||
-      (draft.title.trim() && draft.excerpt.trim().length >= 20));
+      (draft.title.trim() &&
+        draft.excerpt.trim().length >= 20 &&
+        (!draft.sourceUrl || zhihuUrl(draft.sourceUrl))));
   const duplicate =
     latest &&
     JSON.stringify(latest.draft) === JSON.stringify(draft) &&
@@ -95,7 +127,7 @@ export default function AICoach({ id }: { id: number }) {
     const sent = { ...draft },
       goal = state.goal;
     try {
-      const payload = { ...sent, chapter: id, goal };
+      const payload = { ...sent, chapter: id, goal, responseVersion: 2 };
       const digest = await crypto.subtle.digest(
         'SHA-256',
         new TextEncoder().encode(JSON.stringify(payload)),
@@ -125,6 +157,14 @@ export default function AICoach({ id }: { id: number }) {
       if (!raw || typeof raw !== 'object')
         throw new Error('服务暂时不可用，输入已保留。');
       const result = raw as Record<string, unknown>;
+      if (response.status === 401) {
+        location.assign(
+          sitePath(
+            '/access?next=' + encodeURIComponent(`/coach?chapter=${id}`),
+          ),
+        );
+        return;
+      }
       if (!response.ok)
         throw new Error(
           typeof result.error === 'string'
@@ -133,6 +173,8 @@ export default function AICoach({ id }: { id: number }) {
         );
       if (
         !isFeedback(result.feedback, sent.answer) ||
+        !result.feedback.steps ||
+        !result.feedback.explanation ||
         typeof result.id !== 'string' ||
         typeof result.createdAt !== 'number' ||
         !Number.isFinite(result.createdAt)
@@ -166,15 +208,36 @@ export default function AICoach({ id }: { id: number }) {
     }
   };
   return (
-    <section className="ai-coach" aria-label="AI 学习陪练">
+    <section className="ai-coach" aria-label="AI 学习教练">
       <div className="coach-intro">
         <span className="coach-eyebrow">
-          <Sparkles size={15} /> 想一想，再让 AI 帮一把
+          <Sparkles size={15} /> AI 教练 · 学习工作台
         </span>
-        <h2>把自己的判断，练得更扎实。</h2>
-        <p>写下理由，找到一个缺口，再用一次。每次留下一点真正属于你的理解。</p>
+        <h2>把没想通的，聊明白。</h2>
+        <p>先拆方法，再解释答案。可以直接提问，也可以带着自己的判断来讨论。</p>
       </div>
       <fieldset className="coach-form" disabled={busy}>
+        <div className="coach-intent-tabs" aria-label="教练方式">
+          {[
+            ['question', '提问解惑'],
+            ['judgment', '检验判断'],
+          ].map(([value, label]) => (
+            <button
+              key={value}
+              type="button"
+              aria-pressed={draft.intent === value}
+              onClick={() =>
+                saveCoachDraft(id, {
+                  intent: value as 'question' | 'judgment',
+                  question: '',
+                  previous: '',
+                })
+              }
+            >
+              {label}
+            </button>
+          ))}
+        </div>
         <label className="coach-field">
           <span>
             我想把 AI 用在哪里 <small>可选</small>
@@ -186,7 +249,7 @@ export default function AICoach({ id }: { id: number }) {
             placeholder="例如：判断论文摘要是否可信，或写出可执行的工作方案"
           />
         </label>
-        <div className="coach-material-tabs" aria-label="AI 陪练材料">
+        <div className="coach-material-tabs" aria-label="AI 教练材料">
           <button
             type="button"
             aria-pressed={draft.mode === 'sample'}
@@ -194,7 +257,7 @@ export default function AICoach({ id }: { id: number }) {
               saveCoachDraft(id, { mode: 'sample', question: '', previous: '' })
             }
           >
-            本关情境
+            本章情境
           </button>
           <button
             type="button"
@@ -213,54 +276,35 @@ export default function AICoach({ id }: { id: number }) {
             <p>{sample.excerpt}</p>
           </div>
         ) : (
-          <div className="coach-import">
-            <label className="coach-field">
-              <span>摘录标题</span>
-              <input
-                value={draft.title}
-                maxLength={200}
-                onChange={(e) => saveCoachDraft(id, { title: e.target.value })}
-              />
-            </label>
-            <label className="coach-field">
-              <span>
-                作者署名 <small>可选</small>
-              </span>
-              <input
-                value={draft.author}
-                maxLength={100}
-                onChange={(e) => saveCoachDraft(id, { author: e.target.value })}
-              />
-            </label>
-            <label className="coach-field">
-              <span>
-                相关摘录 <small>20–3000 字</small>
-              </span>
-              <textarea
-                value={draft.excerpt}
-                maxLength={3000}
-                onChange={(e) =>
-                  saveCoachDraft(id, { excerpt: e.target.value })
-                }
-                placeholder="粘贴一段你想真正弄懂的知乎回答，保留上下文。"
-              />
-            </label>
-          </div>
+          <ZhihuImport id={id} draft={draft} />
         )}
         <label className="coach-field coach-answer">
           <span>
-            {draft.question ? '换个情境，再想一次' : '先写下你的判断'}
+            {draft.intent === 'question'
+              ? '你想弄明白什么'
+              : draft.question
+                ? '换个情境，再想一次'
+                : '先写下你的判断'}
           </span>
-          <p>{question}</p>
+          <p>
+            {draft.intent === 'question'
+              ? '说清你的疑问和使用场景，教练会给出三步说明与通俗解答。'
+              : question}
+          </p>
           <textarea
             id="coach-answer"
             value={draft.answer}
             maxLength={2000}
             onChange={(e) => saveCoachDraft(id, { answer: e.target.value })}
-            placeholder="我会／不会直接采用，因为……我还需要核查……它可能不适用于……"
+            placeholder={
+              draft.intent === 'question'
+                ? '例如：AI 给出了很有说服力的结论，我应该怎样判断它能不能用？'
+                : '我会／不会直接采用，因为……我还需要核查……它可能不适用于……'
+            }
           />
           <small>
-            {draft.answer.length} / 2000 · 至少 20 字，不用追求标准答案
+            {draft.answer.length} / 2000 · 至少{' '}
+            {draft.intent === 'question' ? 10 : 20} 字，背景越具体越有帮助
           </small>
         </label>
       </fieldset>
@@ -273,15 +317,15 @@ export default function AICoach({ id }: { id: number }) {
           {busy ? (
             <>
               <LoaderCircle className="coach-spinner" size={17} />{' '}
-              正在分析你的判断…
+              教练正在整理三步讲解…
             </>
           ) : (
             <>
               {duplicate
                 ? '这次回答已有反馈'
                 : latest
-                  ? '请 AI 看看这次的判断'
-                  : '请 AI 帮我找一个缺口'}
+                  ? '请教练看看这次的想法'
+                  : '请教练解答'}
               <ArrowRight size={17} />
             </>
           )}
@@ -315,7 +359,7 @@ export default function AICoach({ id }: { id: number }) {
             );
             const a = document.createElement('a');
             a.href = url;
-            a.download = 'AI陪练-当前内容.json';
+            a.download = 'AI教练-当前内容.json';
             a.click();
             setTimeout(() => URL.revokeObjectURL(url), 1000);
           }}
@@ -337,7 +381,14 @@ export default function AICoach({ id }: { id: number }) {
               {new Date(latest.createdAt).toLocaleDateString('zh-CN')}
             </span>
           </div>
+          <div className="coach-sent-question">
+            <span>
+              {latest.draft.intent === 'question' ? '本次提问' : '本次判断'}
+            </span>
+            <p>{latest.draft.answer}</p>
+          </div>
           <FeedbackView feedback={latest.feedback} />
+          <CoachShare session={latest} title={lessons[id - 1].shortTitle} />
           <div className="coach-next-question">
             <span>下一次，可以这样练</span>
             <p>{latest.feedback.question}</p>
@@ -354,7 +405,7 @@ export default function AICoach({ id }: { id: number }) {
                 document.getElementById('coach-answer')?.focus();
               }}
             >
-              <RotateCcw size={15} /> 修改刚才的回答
+              <RotateCcw size={15} /> 补充这次的问题或判断
             </button>
             <button
               className="learn-secondary"
@@ -363,6 +414,7 @@ export default function AICoach({ id }: { id: number }) {
                 saveCoachDraft(id, {
                   ...latest.draft,
                   answer: '',
+                  intent: 'judgment',
                   previous: '',
                   question: latest.feedback.question,
                 });
@@ -374,7 +426,7 @@ export default function AICoach({ id }: { id: number }) {
           </div>
           <Link
             className="coach-recommendation"
-            href={`/learn/${latest.feedback.nextChapter}?tab=coach`}
+            href={`/learn/${latest.feedback.nextChapter}`}
           >
             <span>
               <small>根据这次反馈，建议再看</small>

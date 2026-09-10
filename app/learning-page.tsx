@@ -3,7 +3,6 @@ import { sitePath } from './site-config';
 import { useEffect, useState } from 'react';
 import Link from './site-link';
 import DiscussionLab from './discussion-lab';
-import AICoach from './ai-coach';
 import { useLearningActivity } from './learning-activity';
 import Image from 'next/image';
 import {
@@ -37,7 +36,8 @@ export default function LearningPage({ id }: { id: number }) {
     // The review desk can return directly to this chapter's discussion exercise.
     if (new URLSearchParams(location.search).get('tab') === 'discussion')
       setPage(2);
-    if (new URLSearchParams(location.search).get('tab') === 'coach') setPage(3);
+    if (new URLSearchParams(location.search).get('tab') === 'coach')
+      location.replace(sitePath(`/coach?chapter=${id}`));
   }, [id]);
   /* oxlint-enable react/react-compiler */
   const done = progress.completed.includes(id),
@@ -64,7 +64,7 @@ export default function LearningPage({ id }: { id: number }) {
         <span>/</span>
         <span>{lesson.shortTitle}</span>
       </nav>
-      <article className="learning-book">
+      <article className="learning-book liquid-glass">
         <aside className="book-art">
           <div className="book-art-meta">
             <span>THE LEARNING ATLAS</span>
@@ -109,21 +109,40 @@ export default function LearningPage({ id }: { id: number }) {
           </div>
           <h1>{lesson.title}</h1>
           <p className="lesson-intro">{lesson.intro}</p>
-          <nav className="page-tabs" aria-label="章节内页">
-            <button aria-pressed={page === 0} onClick={() => setPage(0)}>
-              01 读一页
-            </button>
-            <button aria-pressed={page === 1} onClick={() => setPage(1)}>
-              02 试一试
-            </button>
-            <button aria-pressed={page === 2} onClick={() => setPage(2)}>
-              03 观点练习
-            </button>
-            <button aria-pressed={page === 3} onClick={() => setPage(3)}>
-              04 AI 陪练
-            </button>
+          <a
+            className="lesson-poster-mobile"
+            href={sitePath(`/posters/${number(id)}.webp`)}
+            target="_blank"
+            rel="noreferrer"
+          >
+            查看本章图鉴
+            <ArrowUpRight size={14} />
+          </a>
+          <nav className="page-tabs lesson-step-tabs" aria-label="章节内页">
+            {[
+              ['读一页', '理解关键概念'],
+              ['试一试', '检验你的判断'],
+              ['观点练习', '把知识用起来'],
+            ].map(([title, description], index) => (
+              <button
+                key={title}
+                className="liquid-glass"
+                aria-pressed={page === index}
+                aria-controls="lesson-active-page"
+                onClick={() => setPage(index)}
+              >
+                <span className="lesson-step-number">0{index + 1}</span>
+                <span>
+                  <strong>{title}</strong>
+                  <small>{description}</small>
+                </span>
+                {page === index && (
+                  <span className="lesson-step-dot" aria-label="当前页面" />
+                )}
+              </button>
+            ))}
           </nav>
-          <div className="turning-page" key={page}>
+          <div className="turning-page" id="lesson-active-page" key={page}>
             {page === 0 ? (
               <>
                 <ol className="takeaways">
@@ -144,8 +163,6 @@ export default function LearningPage({ id }: { id: number }) {
                   翻到练习页 <ArrowRight size={18} />
                 </button>
               </>
-            ) : page === 3 ? (
-              <AICoach id={id} />
             ) : page === 2 ? (
               <DiscussionLab id={id} />
             ) : (
@@ -242,11 +259,21 @@ export default function LearningPage({ id }: { id: number }) {
               </>
             )}
           </div>
+          <Link
+            className="lesson-coach-entry liquid-glass"
+            href={`/coach?chapter=${id}`}
+          >
+            <span>
+              <strong>遇到没想通的地方？</strong>
+              <small>让 AI 教练拆成三步，陪你弄明白</small>
+            </span>
+            <ArrowRight size={18} />
+          </Link>
           <footer className="book-page-footer">
             <Link href={`/review?chapter=${id}`}>
               拆解思路，做一次复盘 <ArrowUpRight size={13} />
             </Link>
-            <span>0{page + 1} / 04</span>
+            <span>0{page + 1} / 03</span>
           </footer>
         </section>
       </article>

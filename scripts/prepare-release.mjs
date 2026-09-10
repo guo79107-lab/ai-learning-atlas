@@ -2,9 +2,14 @@ import { readFile, writeFile, readdir, stat, cp } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import path from 'node:path';
 const root = 'dist/client';
-const release=JSON.parse(await readFile('deploy/release.json','utf8'));
+const release = JSON.parse(await readFile('deploy/release.json', 'utf8'));
 // Flatten only build assets in the publish directory; page URLs retain basePath.
-if(release.basePath)await cp(path.join(root,release.basePath.slice(1),'_next'),path.join(root,'_next'),{recursive:true});
+if (release.basePath)
+  await cp(
+    path.join(root, release.basePath.slice(1), '_next'),
+    path.join(root, '_next'),
+    { recursive: true },
+  );
 const manifest = JSON.parse(
   await readFile('dist/server/vinext-prerender.json', 'utf8'),
 );
@@ -15,6 +20,7 @@ for (const page of [
   'index',
   'explore',
   'review',
+  'coach',
   ...Array.from({ length: 11 }, (_, i) => `learn/${i + 1}`),
 ])
   for (const ext of ['html', 'rsc']) await stat(`${root}/${page}.${ext}`);

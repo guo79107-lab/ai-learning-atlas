@@ -112,7 +112,7 @@ export default function CoachReview({
       : cards.filter((s) => s.reviewStep < 3 && s.dueAt <= now).length;
   const download = () => {
     const value = [
-      '# 我的 AI 陪练记录',
+      '# 我的 AI 教练记录',
       `学习目标：${state.goal || '暂未填写'}`,
       ...sessions.flatMap((s) => [
         '',
@@ -147,7 +147,7 @@ export default function CoachReview({
   return (
     <section
       className="review-panel coach-review"
-      aria-label="AI 陪练与复习计划"
+      aria-label="AI 教练与复习计划"
     >
       <div className="coach-review-heading">
         <div>
@@ -156,7 +156,7 @@ export default function CoachReview({
           <p>
             {latest
               ? `${sessions.length} 次真实练习 · ${dueCount ? `${dueCount} 张卡片可以回顾` : '按照自己的节奏，慢慢来'}`
-              : '先做一次 AI 陪练，你的反馈、复习卡和下一步会出现在这里。'}
+              : '先做一次 AI 教练，你的反馈、复习卡和下一步会出现在这里。'}
           </p>
         </div>
         {sessions.length > 0 && (
@@ -180,7 +180,7 @@ export default function CoachReview({
               <p>{latest.feedback.reason}</p>
             </div>
             <Link
-              href={`/learn/${latest.feedback.nextChapter}?tab=coach`}
+              href={`/coach?chapter=${latest.feedback.nextChapter}`}
               className="learn-secondary"
             >
               去第 {latest.feedback.nextChapter} 关 <ArrowRight size={16} />
@@ -226,8 +226,8 @@ export default function CoachReview({
           </details>
         </>
       ) : (
-        <Link className="learn-primary" href={`/learn/${selected}?tab=coach`}>
-          带着一个判断，开始 AI 陪练 <ArrowRight size={16} />
+        <Link className="learn-primary" href={`/coach?chapter=${selected}`}>
+          带着一个判断，开始 AI 教练 <ArrowRight size={16} />
         </Link>
       )}
     </section>

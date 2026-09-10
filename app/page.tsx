@@ -1,5 +1,6 @@
 'use client';
 import { useState, type CSSProperties } from 'react';
+import Image from 'next/image';
 import {
   ArrowRight,
   BookOpen,
@@ -12,7 +13,6 @@ import Link from './site-link';
 import { number, stages, useProgress } from './atlas-store';
 import { sitePath } from './site-config';
 import lessons from './lessons.json';
-import BreezeVideo from './breeze-video';
 
 const colors = [
   '#cdc6b4',
@@ -94,9 +94,8 @@ export default function Home() {
   const progress = useProgress();
   return (
     <main
-      className={`folio-home folio-home--background ${booksOpen ? 'has-books' : ''}`}
+      className={`folio-home folio-home--collage ${booksOpen ? 'has-books' : ''}`}
     >
-      <BreezeVideo />
       <header className="folio-nav">
         <Link href="/explore" className="folio-brand">
           <BookOpen size={25} />
@@ -114,40 +113,37 @@ export default function Home() {
           <ArrowRight size={15} />
         </Link>
       </header>
-      <section className="folio-copy">
-        <p className="folio-eyebrow">AI 学习图鉴 · 从会问，到会用</p>
-        <h1 className="glass-heading">
-          <span>会用 AI</span>
-          <span>更会判断</span>
-        </h1>
-        <p className="folio-hook">
-          有的人用ai只能问出10块钱的答案，而有的人能问出几千甚至几万的答案。
-        </p>
-        <p className="folio-tension">
-          来知乎，把好奇变成知识，把知识变成自己的本事。
-        </p>
-        <Link className="folio-entry liquid-glass" href="/explore">
-          开始闯关，把 AI 用出价值{' '}
-          <span>
-            <ArrowRight size={20} />
-          </span>
+      <section className="collage-hero" aria-labelledby="homepage-title">
+        <h1 id="homepage-title" className="sr-only">会用 AI，更会判断 · AI 学习图鉴</h1>
+        <Link href="/explore" className="collage-poster" aria-label="会用 AI，更会判断：进入星球学习地图">
+          <Image
+            src={sitePath('/media/learning-collage-hero.webp')}
+            alt="旧纸与书籍拼贴海报：会用 AI，更会判断。来知乎，把好问题学成真本事。11 个主题，从理解到应用：读懂知识、练习判断、AI 教练。"
+            width={1672}
+            height={941}
+            priority
+            fetchPriority="high"
+          />
         </Link>
-        <p className="folio-description">
-          11 个关卡，练会拆问题、给背景、核验答案。
-          <br />
-          带上一个真实任务，从第一关开始改变。
-        </p>
-        <button
-          type="button"
-          className="folio-books-toggle liquid-glass"
-          aria-expanded={booksOpen}
-          aria-controls="homepage-learning-books"
-          onClick={() => setBooksOpen((open) => !open)}
-        >
-          <BookOpen size={16} />
-          <span>{booksOpen ? '收起学习图鉴' : '展开 11 本学习图鉴'}</span>
-          {booksOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-        </button>
+        <div className="collage-entry-row">
+          <div className="collage-actions">
+            <Link className="folio-entry liquid-glass" href="/explore">
+              开始闯关，把 AI 用出价值 <span><ArrowRight size={20} /></span>
+            </Link>
+            <button
+              type="button"
+              className="folio-books-toggle liquid-glass"
+              aria-expanded={booksOpen}
+              aria-controls="homepage-learning-books"
+              onClick={() => setBooksOpen((open) => !open)}
+            >
+              <BookOpen size={16} />
+              <span>{booksOpen ? '收起学习图鉴' : '展开 11 本学习图鉴'}</span>
+              {booksOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+            </button>
+          </div>
+          <p className="collage-caption">有的人用ai只能问出10块钱的答案，而有的人能问出几千甚至几万的答案。<span>从拆问题、给背景、核验答案开始，练出自己的判断。</span></p>
+        </div>
       </section>
       <div id="homepage-learning-books" hidden={!booksOpen}>
         {booksOpen && (
